@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#7a1a1a">
+<title>龍山・曾家族譜</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#8b1a1a;--red2:#b52828;--red3:#f5e8e8;
+  --gold:#b8860b;--gold2:#e8c040;--gold3:#fef3c7;
+  --ink:#1a0f00;--ink2:#3d2b10;--ink3:#7a5c30;
+  --parch:#fdf6e3;--parch2:#f5ead0;--parch3:#e8d8b0;
+  --jade:#1f6b40;--blue:#1a4a8b;
+  --border:rgba(139,105,20,0.22);--shadow:rgba(26,15,0,0.12);
+  --serif:'Noto Serif TC',serif;--sans:'Noto Sans TC',sans-serif;
+  --nav-h:58px;--safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--serif);background:var(--parch);color:var(--ink);min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 8px)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(139,105,20,0.045) 31px,rgba(139,105,20,0.045) 32px);pointer-events:none}
+.hdr{position:relative;z-index:10;background:var(--red);padding:14px 16px;display:flex;align-items:center;gap:13px}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% 120%,rgba(200,50,0,0.35),transparent);pointer-events:none}
+.hdr-seal{position:relative;z-index:1;width:50px;height:50px;border:2px solid var(--gold2);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);flex-shrink:0}
+.hdr-seal span{font-size:16px;color:var(--gold2);font-weight:700;line-height:1.2}
+.hdr-text{position:relative;z-index:1;min-width:0}
+.hdr-text h1{font-size:clamp(15px,3.8vw,22px);font-weight:900;color:#fff;letter-spacing:3px;text-shadow:0 2px 6px rgba(0,0,0,0.4)}
+.hdr-text p{font-size:11px;color:var(--gold3);margin-top:3px;letter-spacing:1px;font-family:var(--sans)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--ink);border-top:2px solid var(--gold);display:flex;padding-bottom:var(--safe-b);height:calc(var(--nav-h) + var(--safe-b))}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;cursor:pointer;color:rgba(255,255,255,0.45);padding:6px 0;border-top:2.5px solid transparent;-webkit-user-select:none;user-select:none;touch-action:manipulation;transition:color 0.18s}
+.nb.active{color:var(--gold2);border-top-color:var(--gold2)}
+.nb:active{background:rgba(255,255,255,0.06)}
+.nb-icon{font-size:19px;line-height:1}
+.nb-lbl{font-size:9.5px;font-family:var(--sans);white-space:nowrap}
+main{position:relative;z-index:1;padding:14px 13px 6px}
+.panel{display:none;animation:fi 0.22s ease}
+.panel.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stitle{text-align:center;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.stitle::before,.stitle::after{content:'◆';color:var(--gold);font-size:10px}
+.stitle span{font-size:17px;font-weight:700;color:var(--red);letter-spacing:3px}
+
+/* TREE */
+.t-hint{font-size:11px;color:var(--ink3);font-family:var(--sans);margin-bottom:8px}
+.t-scroll{background:var(--parch2);border:1px solid var(--border);border-radius:10px;overflow:auto;-webkit-overflow-scrolling:touch;max-height:52vh;padding:8px;cursor:grab}
+.t-scroll:active{cursor:grabbing}
+.t-node{cursor:pointer}
+.nd-box{margin-top:12px;background:linear-gradient(135deg,#fff9ee,#fef3d8);border:1px solid var(--gold);border-radius:10px;padding:15px 16px;display:none;position:relative}
+.nd-box::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;background:var(--red);border-radius:0 2px 2px 0}
+.nd-name{font-size:20px;font-weight:700;color:var(--red);letter-spacing:2px}
+.nd-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:11px;font-family:var(--sans);padding:2px 9px;border-radius:20px;font-weight:500;border:1px solid}
+.tg{background:var(--red3);color:var(--red);border-color:rgba(139,26,26,0.2)}
+.tr{background:var(--gold3);color:var(--ink2);border-color:rgba(184,134,11,0.25)}
+.nd-rows{margin-top:12px}
+.nd-row{display:flex;gap:8px;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(139,105,20,0.09)}
+.nd-row:last-child{border:none}
+.nd-lbl{width:66px;flex-shrink:0;font-size:11px;color:var(--ink3);font-family:var(--sans);padding-top:1px}
+.nd-val{color:var(--ink2);line-height:1.75}
+
+/* SEARCH */
+.sbar{display:flex;gap:8px;margin-bottom:14px}
+.sbar input{flex:1;padding:13px 14px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-family:var(--serif);font-size:16px;color:var(--ink);-webkit-appearance:none}
+.sbar input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.12)}
+.btn-r{padding:13px 16px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:14px;cursor:pointer;letter-spacing:1px;white-space:nowrap;-webkit-appearance:none;touch-action:manipulation;min-height:50px}
+.btn-r:active{background:var(--red2)}
+.rc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation}
+.rc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+.rc:active{background:var(--parch2)}
+.rc-n{font-size:17px;font-weight:700;color:var(--red)}
+.rc-i{font-size:12px;color:var(--ink3);margin-top:5px;font-family:var(--sans);line-height:1.85}
+.no-r{text-align:center;color:var(--ink3);padding:40px 16px;font-size:14px}
+
+/* FORM */
+.fc{background:linear-gradient(135deg,#fff9ee,#fef8e8);border:1px solid var(--border);border-radius:12px;padding:18px 15px;margin-bottom:13px;box-shadow:0 2px 10px var(--shadow)}
+.fc-h{font-size:14px;font-weight:700;color:var(--red);letter-spacing:2px;margin-bottom:13px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.fc-h::before{content:'◈';font-size:13px;color:var(--gold)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.fg.one{grid-template-columns:1fr}
+@media(max-width:380px){.fg{grid-template-columns:1fr}}
+.fi{display:flex;flex-direction:column;gap:5px}
+.fi label{font-size:11px;color:var(--ink3);font-family:var(--sans);letter-spacing:0.4px}
+.req{color:var(--red2)}
+.fi input,.fi select,.fi textarea{
+  padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;
+  background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;
+  color:var(--ink);-webkit-appearance:none;appearance:none;width:100%;
+  transition:border-color 0.2s;min-height:50px;
+}
+.fi select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a5c30' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.fi input:focus,.fi select:focus,.fi textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,0.12)}
+.fi textarea{resize:vertical;min-height:90px}
+
+/* 西元換算區塊 */
+.date-input-wrap{position:relative}
+.date-row{display:flex;gap:8px;align-items:flex-start}
+.date-row input{flex:1;min-width:0}
+.date-row .fi-time{width:130px;flex-shrink:0}
+.convert-result{margin-top:6px;padding:8px 12px;background:rgba(26,78,139,0.08);border:1px solid rgba(26,78,139,0.2);border-radius:6px;font-size:12px;color:var(--blue);font-family:var(--sans);display:none;line-height:1.7}
+.convert-result strong{color:var(--red);font-size:13px}
+
+/* 父母搜尋 */
+.parent-search-wrap{position:relative}
+.parent-search-wrap input{width:100%;min-height:50px}
+.parent-dropdown{position:absolute;top:100%;left:0;right:0;z-index:200;background:#fff;border:1.5px solid var(--gold);border-radius:8px;box-shadow:0 8px 24px var(--shadow);max-height:200px;overflow-y:auto;display:none;margin-top:2px}
+.parent-dropdown.open{display:block}
+.parent-opt{padding:12px 14px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--border);font-family:var(--serif);display:flex;align-items:center;gap:8px;touch-action:manipulation}
+.parent-opt:last-child{border:none}
+.parent-opt:active{background:var(--parch2)}
+.parent-opt-gen{font-size:11px;font-family:var(--sans);padding:1px 7px;border-radius:12px;background:rgba(139,26,26,0.1);color:var(--red);white-space:nowrap}
+.parent-opt-role{font-size:11px;color:var(--ink3);font-family:var(--sans)}
+.selected-parent{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(139,26,26,0.06);border:1px solid rgba(139,26,26,0.2);border-radius:6px;font-size:13px;font-family:var(--sans);margin-top:4px;cursor:pointer}
+.selected-parent .clr-btn{margin-left:auto;font-size:12px;color:var(--ink3);padding:2px 6px;border-radius:4px;background:rgba(0,0,0,0.06)}
+
+.fbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.bsub{flex:1;min-width:130px;padding:15px 18px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:16px;letter-spacing:2px;cursor:pointer;box-shadow:0 3px 10px rgba(139,26,26,0.3);touch-action:manipulation;min-height:52px}
+.bsub:active{background:var(--red2);transform:scale(0.98)}
+.bclr{padding:15px 16px;background:transparent;color:var(--ink3);border:1.5px solid var(--border);border-radius:8px;font-family:var(--serif);font-size:14px;cursor:pointer;touch-action:manipulation;min-height:52px}
+.bclr:active{background:var(--parch3)}
+.toast{display:none;background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;padding:14px 15px;color:#1b5e20;font-size:13px;margin-top:12px;font-family:var(--sans);line-height:1.65}
+
+/* MEMBERS */
+.fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.fbar label{font-size:12px;color:var(--ink3);font-family:var(--sans)}
+.fbar select{padding:9px 30px 9px 11px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-family:var(--serif);font-size:14px;color:var(--ink);-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a5c30' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+.cnt{margin-left:auto;font-size:12px;color:var(--ink3);font-family:var(--sans);background:var(--parch2);padding:4px 11px;border-radius:20px;border:1px solid var(--border)}
+.mlist{display:flex;flex-direction:column;gap:10px}
+@media(min-width:580px){.mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}}
+.mc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 15px;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation}
+.mc:active{background:var(--parch2)}
+.mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.mc-n{font-size:16px;font-weight:700;color:var(--red)}
+.mc-g{font-size:11px;font-family:var(--sans);padding:2px 8px;border-radius:20px;background:rgba(139,26,26,0.08);color:var(--red);border:1px solid rgba(139,26,26,0.15);white-space:nowrap}
+.mc-r{font-size:12px;color:var(--ink3);font-family:var(--sans);margin-top:3px}
+.mc-d{font-size:12px;color:var(--ink3);font-family:var(--sans);margin-top:8px;line-height:1.8}
+.mc-nt{font-size:12px;color:var(--jade);font-family:var(--sans);margin-top:5px;font-style:italic}
+.empty{text-align:center;padding:50px 16px;color:var(--ink3);font-size:14px}
+
+/* MODAL */
+.mov{display:none;position:fixed;inset:0;z-index:500;background:rgba(26,15,0,0.6);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);align-items:flex-end;justify-content:center}
+.mov.open{display:flex}
+@media(min-width:600px){.mov{align-items:center}}
+.modal{background:linear-gradient(135deg,#fff9ee,#fef6e0);border:1px solid var(--gold);border-radius:16px 16px 0 0;padding:20px 18px 36px;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;animation:su 0.26s ease}
+@media(min-width:600px){.modal{border-radius:14px;max-height:80vh}}
+@keyframes su{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.mhandle{width:38px;height:4px;background:rgba(139,105,20,0.28);border-radius:2px;margin:0 auto 16px}
+.mclose{position:absolute;top:14px;right:14px;background:var(--parch2);border:1px solid var(--border);width:34px;height:34px;border-radius:50%;font-size:17px;color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.mn{font-size:22px;font-weight:700;color:var(--red);letter-spacing:2px}
+.ms{font-size:13px;color:var(--ink3);margin-top:4px;font-family:var(--sans)}
+.mdiv{border:none;border-top:1px solid var(--border);margin:13px 0}
+.mrow{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,0.08);font-size:14px}
+.mrow:last-child{border:none}
+.ml{width:68px;flex-shrink:0;font-size:11px;color:var(--ink3);font-family:var(--sans);padding-top:2px}
+.mv{color:var(--ink2);line-height:1.75}
+.ac{background:linear-gradient(135deg,#fff9ee,#fef6e0);border:1px solid var(--border);border-radius:12px;padding:18px 15px;margin-bottom:13px}
+.ac h2{font-size:15px;font-weight:700;color:var(--red);letter-spacing:2px;margin-bottom:11px}
+.ac p{font-size:13px;line-height:2;color:var(--ink2);margin-bottom:9px;font-family:var(--sans)}
+footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px solid var(--border);font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:8px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--parch2)}
+::-webkit-scrollbar-thumb{background:var(--parch3);border-radius:3px}
+/* 行業標籤 */
+.ind-tag{padding:5px 12px;border:1px solid var(--border);border-radius:20px;background:#fff;font-family:var(--sans);font-size:12px;color:var(--ink3);cursor:pointer;touch-action:manipulation;white-space:nowrap}
+.ind-tag:active,.ind-tag.active-ind{background:var(--red);color:#fff;border-color:var(--red)}
+.lock-screen{position:fixed;inset:0;z-index:9999;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.lock-screen::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 6px);pointer-events:none}
+.lock-box{position:relative;z-index:1;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:36px 28px;width:100%;max-width:360px;text-align:center}
+.lock-title{font-size:22px;font-weight:900;color:#fff;letter-spacing:4px;margin-bottom:4px}
+.lock-sub{font-size:12px;color:rgba(255,255,255,0.6);font-family:var(--sans);letter-spacing:1px;margin-bottom:28px}
+.lock-input{width:100%;padding:14px 16px;font-size:20px;text-align:center;letter-spacing:8px;border:2px solid rgba(255,255,255,0.3);border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;font-family:var(--serif);margin-bottom:12px;-webkit-appearance:none}
+.lock-input::placeholder{letter-spacing:2px;font-size:14px;color:rgba(255,255,255,0.4)}
+.lock-input:focus{outline:none;border-color:var(--gold2);background:rgba(255,255,255,0.15)}
+.lock-btn{width:100%;padding:14px;background:var(--gold);color:var(--ink);border:none;border-radius:10px;font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:3px;cursor:pointer;touch-action:manipulation;margin-bottom:10px}
+.lock-btn:active{opacity:0.85}
+.lock-err{font-size:13px;color:#ffb3b3;font-family:var(--sans);min-height:20px;margin-top:4px}
+.lock-hint{font-size:11px;color:rgba(255,255,255,0.35);font-family:var(--sans);margin-top:20px}
+@media print{.bnav,.hdr,.lock-screen{display:none!important}.panel{display:block!important}body{padding:0}}
+/* 浮動通知 */
+.float-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9000;background:#1b5e20;color:#fff;font-family:var(--sans);font-size:14px;padding:14px 22px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.25);white-space:nowrap;opacity:0;transition:opacity 0.3s;pointer-events:none;letter-spacing:0.5px;max-width:90vw;text-align:center}
+</style>
+</head>
+<body>
+<!-- 密碼保護畫面 -->
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-box">
+    <div style="font-size:52px;margin-bottom:10px">🏮</div>
+    <div class="lock-title">龍山・曾家族譜</div>
+    <div class="lock-sub">請輸入密碼進入族譜</div>
+    <input type="password" class="lock-input" id="lock-pw" placeholder="輸入密碼" inputmode="text" onkeyup="if(event.key==='Enter')checkPw()">
+    <button class="lock-btn" onclick="checkPw()">進　入</button>
+    <div class="lock-err" id="lock-err"></div>
+    <div class="lock-hint">僅限曾家族人使用・請勿外傳密碼</div>
+  </div>
+</div>
+<!-- 浮動通知 -->
+<div class="float-toast" id="float-toast"></div>
+
+<header class="hdr">
+  <div class="hdr-seal"><span>龍</span><span>山</span></div>
+  <div class="hdr-text">
+    <h1>曾家歷代祖譜</h1>
+    <p>十二代四房裔孫・維杰・開放族人共修</p>
+  </div>
+  <div style="margin-left:auto;text-align:right;position:relative;z-index:1;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+    <div id="sync-status" style="font-size:11px;font-family:var(--sans);color:var(--gold3);letter-spacing:0.5px;white-space:nowrap">🔄 連線中…</div>
+    <button onclick="downloadReport()" style="font-size:10px;padding:3px 8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:5px;color:var(--gold3);cursor:pointer;font-family:var(--sans);white-space:nowrap;touch-action:manipulation">⬇ 下載族譜</button>
+  </div>
+</header>
+<main>
+
+<!-- TREE -->
+<div id="p-tree" class="panel active">
+  <div class="stitle"><span>族譜樹狀圖</span></div>
+  <p class="t-hint">👆 點擊人名查看詳細資料 ｜ 左右滑動捲動族譜</p>
+  <div class="t-scroll" id="ts">
+    <svg id="tsvg" height="780"><defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><g id="tl"></g><g id="tn"></g></svg>
+  </div>
+  <div class="nd-box" id="ndb">
+    <div class="nd-name" id="ndn"></div>
+    <div class="nd-tags" id="ndt"></div>
+    <div class="nd-rows" id="ndr"></div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div id="p-search" class="panel">
+  <div class="stitle"><span>查詢族人</span></div>
+  <div class="sbar">
+    <input type="search" id="sq" placeholder="姓名・代數・職業・電話" inputmode="search" enterkeyhint="search" onkeyup="if(event.key==='Enter'){this.blur();doSearch()}">
+    <button class="btn-r" onclick="doSearch()">搜尋</button>
+  </div>
+  <!-- 行業快速篩選 -->
+  <div style="margin-bottom:12px">
+    <div style="font-size:12px;color:var(--ink3);font-family:var(--sans);margin-bottom:6px">按行業篩選：</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px" id="ind-filter-btns">
+      <button onclick="filterByIndustry('')" class="ind-tag active-ind">全部</button>
+    </div>
+  </div>
+  <!-- 行業統計 -->
+  <div id="ind-stats" style="margin-bottom:14px"></div>
+  <div id="sr"></div>
+</div>
+
+<!-- ADD -->
+<div id="p-add" class="panel">
+  <div class="stitle"><span>新增族人資料</span></div>
+  <div class="fc">
+    <div class="fc-h">基本資料</div>
+    <div class="fg">
+      <div class="fi"><label>姓名 <span class="req">*</span></label><input type="text" id="fn" placeholder="例：曾維杰" autocomplete="name"></div>
+      <div class="fi"><label>代數 <span class="req">*</span></label>
+        <select id="fg2">
+          <option value="">請選擇</option>
+          <option value="1">第一代</option><option value="2">第二代</option><option value="3">第三代</option><option value="4">第四代</option><option value="5">第五代</option><option value="6">第六代</option><option value="7">第七代</option><option value="8">第八代</option><option value="9">第九代</option><option value="10">第十代</option><option value="11">第十一代</option><option value="12">第十二代</option><option value="13">第十三代</option><option value="14">第十四代</option><option value="15">第十五代</option><option value="16">第十六代</option><option value="17">第十七代</option><option value="18">第十八代</option><option value="19">第十九代</option><option value="20">第二十代</option>
+        </select>
+      </div>
+      <div class="fi"><label>性別</label>
+        <select id="fs"><option value="">請選擇</option><option value="男">男</option><option value="女">女</option></select>
+      </div>
+      <div class="fi"><label>身份／稱謂</label>
+        <select id="fr">
+          <option value="">請選擇</option>
+          <optgroup label="─ 祖先 ─">
+            <option value="祖公">祖公</option>
+          </optgroup>
+          <optgroup label="─ 配偶稱謂 ─">
+            <option value="元配">元配（正室）</option>
+            <option value="側室">側室（副室・同時）</option>
+            <option value="繼室">繼室（續弦・再娶）</option>
+            <option value="前妻">前妻（離異）</option>
+            <option value="現任妻">現任妻</option>
+          </optgroup>
+          <optgroup label="─ 子女 ─">
+            <option value="長子">長子</option><option value="次子">次子</option>
+            <option value="三子">三子</option><option value="四子">四子</option>
+            <option value="五子">五子</option>
+            <option value="長女">長女</option><option value="次女">次女</option>
+            <option value="三女">三女</option><option value="四女">四女</option>
+          </optgroup>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 多位配偶區塊 -->
+    <div class="fc" style="margin-bottom:11px;padding:14px 15px">
+      <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+        <span>配偶資料（可新增多位）</span>
+        <button type="button" onclick="addSpouseRow()" style="font-size:12px;padding:5px 12px;background:var(--red);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:var(--sans);touch-action:manipulation">＋ 新增配偶</button>
+      </div>
+      <div id="spouse-rows">
+        <div class="spouse-row" style="background:rgba(184,134,11,0.05);border-radius:10px;border:1px solid rgba(184,134,11,0.18);padding:12px;margin-bottom:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div class="fi"><label>配偶姓名</label><input type="text" class="sp-name" placeholder="姓名" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label>稱謂</label>
+              <select class="sp-rel" style="min-height:44px;font-size:14px;-webkit-appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;padding-right:28px">
+                <option value="元配">元配（正室）</option>
+                <option value="側室">側室（副室）</option>
+                <option value="繼室">繼室（續弦）</option>
+                <option value="前妻">前妻（離異）</option>
+                <option value="現任妻">現任妻</option>
+                <option value="前夫">前夫（離異）</option>
+                <option value="現任夫">現任夫</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div class="fi"><label>生於（出生年份）</label><input type="text" class="sp-by" placeholder="民國77年 / 1988" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label>生於（月日時辰）</label><input type="text" class="sp-bm" placeholder="三月廿六日戌時" style="min-height:44px;font-size:15px"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="fi"><label>卒於（去世年份，在世留空）</label><input type="text" class="sp-dy" placeholder="民國87年 / 1998" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label>卒於（月日時辰）</label><input type="text" class="sp-dm" placeholder="十一月二十日甲時" style="min-height:44px;font-size:15px"></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:4px">族譜傳統：出生稱「生於」，去世稱「卒於」。若只有一位配偶填第一欄即可，多位請點「＋新增配偶」。</p>
+    </div>
+
+    <!-- 生母欄位（子女填寫時使用）-->
+    <div class="fg one" style="margin-bottom:11px">
+      <div class="fi">
+        <label>生母姓名 <span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">（填寫子女時必填，指生下此人的母親）</span></label>
+        <input type="text" id="fmo-bio" placeholder="例：張氏寶蓮 / 李美玲（前妻）">
+      </div>
+    </div>
+
+    <!-- 父親搜尋 -->
+    <div class="fg one" style="margin-bottom:11px">
+      <div class="fi">
+        <label>父親（可輸入姓名搜尋族人）</label>
+        <div class="parent-search-wrap">
+          <input type="text" id="ffa-input" placeholder="輸入父親姓名搜尋…" autocomplete="off" oninput="searchParent('ffa')" onfocus="searchParent('ffa')">
+          <div class="parent-dropdown" id="ffa-dd"></div>
+        </div>
+        <div class="selected-parent" id="ffa-sel" style="display:none">
+          <span id="ffa-sel-txt"></span>
+          <span class="clr-btn" onclick="clearParent('ffa')">✕ 清除</span>
+        </div>
+        <input type="hidden" id="ffa">
+      </div>
+    </div>
+
+    <!-- 母親搜尋 -->
+    <div class="fg one" style="margin-bottom:11px">
+      <div class="fi">
+        <label>母親（可輸入姓名搜尋族人）</label>
+        <div class="parent-search-wrap">
+          <input type="text" id="fmo-input" placeholder="輸入母親姓名搜尋…" autocomplete="off" oninput="searchParent('fmo')" onfocus="searchParent('fmo')">
+          <div class="parent-dropdown" id="fmo-dd"></div>
+        </div>
+        <div class="selected-parent" id="fmo-sel" style="display:none">
+          <span id="fmo-sel-txt"></span>
+          <span class="clr-btn" onclick="clearParent('fmo')">✕ 清除</span>
+        </div>
+        <input type="hidden" id="fmo">
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fi"><label>現居地</label><input type="text" id="flo" placeholder="台灣・印尼・其他"></div>
+      <div class="fi"><label>在世狀態</label>
+        <select id="falive">
+          <option value="在世">✅ 在世</option>
+          <option value="已故">🕯 已故（卒於）</option>
+          <option value="不詳">❓ 不詳</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fi"><label>聯繫電話</label><input type="tel" id="ftel" placeholder="例：+886-912-345-678" inputmode="tel"></div>
+      <div class="fi"><label>Email 信箱</label><input type="email" id="femail" placeholder="例：name@gmail.com" inputmode="email"></div>
+    </div>
+    <div class="fg">
+      <div class="fi"><label>行業大類</label>
+        <select id="find-cat" onchange="updateIndustrySub()" style="">
+          <option value="">請選擇行業大類</option>
+          <option value="農林漁牧業">農林漁牧業</option>
+          <option value="礦業及土石採取業">礦業及土石採取業</option>
+          <option value="製造業">製造業</option>
+          <option value="電力及燃氣供應業">電力及燃氣供應業</option>
+          <option value="用水供應及污染整治業">用水供應及污染整治業</option>
+          <option value="營建工程業">營建工程業</option>
+          <option value="批發及零售業">批發及零售業</option>
+          <option value="運輸及倉儲業">運輸及倉儲業</option>
+          <option value="住宿及餐飲業">住宿及餐飲業</option>
+          <option value="出版影音及資通訊業">出版影音及資通訊業</option>
+          <option value="金融及保險業">金融及保險業</option>
+          <option value="不動產業">不動產業</option>
+          <option value="專業科學及技術服務業">專業科學及技術服務業</option>
+          <option value="支援服務業">支援服務業</option>
+          <option value="公共行政及國防">公共行政及國防</option>
+          <option value="教育業">教育業</option>
+          <option value="醫療保健及社會工作服務業">醫療保健及社會工作服務業</option>
+          <option value="藝術娛樂及休閒服務業">藝術娛樂及休閒服務業</option>
+          <option value="其他服務業">其他服務業</option>
+        </select>
+      </div>
+      <div class="fi"><label>行業細項</label>
+        <select id="find-sub">
+          <option value="">請先選擇大類</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg one">
+      <div class="fi"><label>職稱 / 職位</label><input type="text" id="fjob" placeholder="例：工程師・業務主管・教師・護士"></div>
+    </div>
+  </div>
+
+  <!-- 出生資料 -->
+  <div class="fc">
+    <div class="fc-h">出生資料</div>
+    <div class="fg one" style="margin-bottom:8px">
+      <div class="fi">
+        <label>西元出生日期 + 時間 → 自動換算</label>
+        <div class="date-row">
+          <input type="text" id="fbd" placeholder="例：1988/04/12" oninput="convertDateText('b')" style="flex:1;min-width:0;padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
+          <div class="fi-time fi">
+            <input type="text" id="fbt" placeholder="20:41" oninput="convertDateText('b')" style="width:100px;padding:13px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
+          </div>
+        </div>
+        <div class="convert-result" id="fb-result"></div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fi"><label>出生年份（農曆/民國，可手動修改）</label><input type="text" id="fby" placeholder="民國77年 / 乾隆甲牛年"></div>
+      <div class="fi"><label>出生月日時辰（可手動修改）</label><input type="text" id="fbm" placeholder="三月廿六日戌時"></div>
+    </div>
+  </div>
+
+  <!-- 去世資料 -->
+  <div class="fc">
+    <div class="fc-h">去世資料（在世者留空）</div>
+    <div class="fg one" style="margin-bottom:8px">
+      <div class="fi">
+        <label>西元去世日期 + 時間 → 自動換算（在世者請勿填寫）</label>
+        <div class="date-row">
+          <input type="text" id="fdd" placeholder="例：1998/11/20" oninput="convertDateText('d')" style="flex:1;min-width:0;padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
+          <div class="fi-time fi">
+            <input type="text" id="fdt" placeholder="例：14:30" oninput="convertDateText('d')" style="width:110px;padding:13px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
+          </div>
+        </div>
+        <div class="convert-result" id="fd-result"></div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fi"><label>去世年份（農曆/民國，可手動修改）</label><input type="text" id="fdy" placeholder="民國87年"></div>
+      <div class="fi"><label>去世月日時辰（可手動修改）</label><input type="text" id="fdm" placeholder="十一月二十日甲時"></div>
+    </div>
+  </div>
+
+  <div class="fc">
+    <div class="fc-h">其他資料</div>
+    <div class="fg one">
+      <div class="fi"><label>備注</label><textarea id="fno" placeholder="事業・遷居・特殊記事…"></textarea></div>
+      <div class="fi"><label>填寫人姓名（選填）</label><input type="text" id="fsu" placeholder="您的名字"></div>
+    </div>
+    <div class="fbtns">
+      <button class="bsub" onclick="submitM()">✦ 加入族人名冊</button>
+      <button class="bclr" onclick="clrForm()">清除</button>
+    </div>
+    <div class="toast" id="toast">✦ 資料已加入族人名冊！族譜樹狀圖已同步更新。</div>
+  </div>
+</div>
+
+<!-- MEMBERS -->
+<div id="p-mem" class="panel">
+  <div class="stitle"><span>族人名冊</span></div>
+  <div class="fbar">
+    <label>代數：</label>
+    <select id="fgn" onchange="renderM()"><option value="">全部</option><option value="1">第一代</option><option value="2">第二代</option><option value="3">第三代</option><option value="4">第四代</option><option value="5">第五代</option><option value="6">第六代</option><option value="7">第七代</option><option value="8">第八代</option><option value="9">第九代</option><option value="10">第十代</option><option value="11">第十一代</option><option value="12">第十二代</option><option value="13">第十三代</option><option value="14">第十四代</option><option value="15">第十五代</option><option value="16">第十六代</option><option value="17">第十七代</option><option value="18">第十八代</option><option value="19">第十九代</option><option value="20">第二十代</option></select>
+    <label>性別：</label>
+    <select id="fsx" onchange="renderM()"><option value="">全部</option><option value="男">男</option><option value="女">女</option></select>
+    <span class="cnt" id="cnt"></span>
+  </div>
+  <div class="mlist" id="ml"></div>
+</div>
+
+<!-- ABOUT -->
+<div id="p-about" class="panel">
+  <div class="stitle"><span>關於族譜</span></div>
+  <div class="ac">
+    <h2>整理說明</h2>
+    <p>本族譜由十二代四房裔孫 <strong>曾維杰</strong> 整理，開放族人共同填寫補充。</p>
+    <p>📱 支援手機和電腦，可直接在手機上查詢及填寫。</p>
+    <p>✨ <strong>新功能：</strong>填寫西元日期和時間，自動換算民國年份和農曆時辰；填寫父母時可直接搜尋族人姓名配對。</p>
+    <p>⚠️ 資料暫存於本機瀏覽器，建議填寫後截圖留存，並聯繫曾維杰集中匯整。</p>
+  </div>
+  <div class="ac">
+    <h2>時辰對照表</h2>
+    <p>子:23-1時 ｜ 丑:1-3時 ｜ 寅:3-5時 ｜ 卯:5-7時<br>辰:7-9時 ｜ 巳:9-11時 ｜ 午:11-13時 ｜ 未:13-15時<br>申:15-17時 ｜ 酉:17-19時 ｜ 戌:19-21時 ｜ 亥:21-23時</p>
+  </div>
+  <footer>龍山・曾家歷代祖公媽名冊 ｜ 維杰存冊・族人共修版</footer>
+</div>
+</main>
+
+<nav class="bnav">
+  <button class="nb active" onclick="sw('tree',this)"><span class="nb-icon">🌳</span><span class="nb-lbl">族譜圖</span></button>
+  <button class="nb" onclick="sw('search',this)"><span class="nb-icon">🔍</span><span class="nb-lbl">查詢</span></button>
+  <button class="nb" onclick="sw('add',this)"><span class="nb-icon">✏️</span><span class="nb-lbl">填寫資料</span></button>
+  <button class="nb" onclick="sw('mem',this)"><span class="nb-icon">📋</span><span class="nb-lbl">名冊</span></button>
+  <button class="nb" onclick="sw('about',this)"><span class="nb-icon">📖</span><span class="nb-lbl">說明</span></button>
+</nav>
+
+<div class="mov" id="mov" onclick="if(event.target===this)cM()">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <button class="mclose" onclick="cM()">✕</button>
+    <div id="modal-view">
+      <div class="mn" id="mmn"></div>
+      <div class="ms" id="mms"></div>
+      <hr class="mdiv">
+      <div id="mmb"></div>
+      <button id="edit-btn" onclick="openEdit()" style="margin-top:16px;width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:15px;letter-spacing:2px;cursor:pointer;touch-action:manipulation">✏️ 編輯此人資料</button>
+      <button onclick="deleteMember()" style="margin-top:8px;width:100%;padding:11px;background:transparent;color:#999;border:1px solid #ddd;border-radius:8px;font-family:var(--sans);font-size:13px;cursor:pointer;touch-action:manipulation">🗑 刪除此人資料</button>
+    </div>
+    <div id="modal-edit" style="display:none">
+      <div style="font-size:16px;font-weight:700;color:var(--red);margin-bottom:14px;letter-spacing:2px" id="edit-title"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="fi"><label>姓名</label><input type="text" id="e-n" style="min-height:46px;font-size:15px"></div>
+        <div class="fi"><label>代數</label>
+          <select id="e-g" style="min-height:46px;font-size:15px;-webkit-appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding-right:30px">
+            <option value="1">第一代</option><option value="2">第二代</option><option value="3">第三代</option><option value="4">第四代</option><option value="5">第五代</option><option value="6">第六代</option><option value="7">第七代</option><option value="8">第八代</option><option value="9">第九代</option><option value="10">第十代</option><option value="11">第十一代</option><option value="12">第十二代</option><option value="13">第十三代</option><option value="14">第十四代</option><option value="15">第十五代</option><option value="16">第十六代</option><option value="17">第十七代</option><option value="18">第十八代</option><option value="19">第十九代</option><option value="20">第二十代</option>
+          </select>
+        </div>
+        <div class="fi"><label>性別</label>
+          <select id="e-sx" style="min-height:46px;font-size:15px;-webkit-appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding-right:30px">
+            <option value="">請選擇</option><option value="男">男</option><option value="女">女</option>
+          </select>
+        </div>
+        <div class="fi"><label>身份</label>
+          <select id="e-r" style="min-height:46px;font-size:15px;-webkit-appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding-right:30px">
+            <option value="">請選擇</option><option value="祖公">祖公</option><option value="祖媽（媳）">祖媽（媳）</option><option value="長子">長子</option><option value="次子">次子</option><option value="三子">三子</option><option value="四子">四子</option><option value="五子">五子</option><option value="長女">長女</option><option value="次女">次女</option><option value="三女">三女</option><option value="四女">四女</option><option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="fi"><label>現居地</label><input type="text" id="e-lo" style="min-height:46px;font-size:15px"></div>
+        <div class="fi"><label>在世狀態</label>
+          <select id="e-alive" style="min-height:46px;font-size:15px;-webkit-appearance:none;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 10px center;font-family:var(--serif);color:var(--ink);width:100%">
+            <option value="在世">✅ 在世</option>
+            <option value="已故">🕯 已故（卒於）</option>
+            <option value="不詳">❓ 不詳</option>
+          </select>
+        </div>
+        <div class="fi"><label>聯繫電話</label><input type="tel" id="e-tel" style="min-height:46px;font-size:15px" placeholder="+886-912-345-678"></div>
+        <div class="fi"><label>Email 信箱</label><input type="email" id="e-email" style="min-height:46px;font-size:15px" placeholder="name@gmail.com"></div>
+        <div class="fi"><label>行業大類</label>
+          <select id="e-ind-cat" onchange="updateEditIndustrySub()" style="min-height:46px;font-size:15px;-webkit-appearance:none;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 10px center;font-family:var(--serif);color:var(--ink);width:100%">
+            <option value="">請選擇行業大類</option>
+            <option value="農林漁牧業">農林漁牧業</option><option value="礦業及土石採取業">礦業及土石採取業</option>
+            <option value="製造業">製造業</option><option value="電力及燃氣供應業">電力及燃氣供應業</option>
+            <option value="用水供應及污染整治業">用水供應及污染整治業</option><option value="營建工程業">營建工程業</option>
+            <option value="批發及零售業">批發及零售業</option><option value="運輸及倉儲業">運輸及倉儲業</option>
+            <option value="住宿及餐飲業">住宿及餐飲業</option><option value="出版影音及資通訊業">出版影音及資通訊業</option>
+            <option value="金融及保險業">金融及保險業</option><option value="不動產業">不動產業</option>
+            <option value="專業科學及技術服務業">專業科學及技術服務業</option><option value="支援服務業">支援服務業</option>
+            <option value="公共行政及國防">公共行政及國防</option><option value="教育業">教育業</option>
+            <option value="醫療保健及社會工作服務業">醫療保健及社會工作服務業</option><option value="藝術娛樂及休閒服務業">藝術娛樂及休閒服務業</option>
+            <option value="其他服務業">其他服務業</option>
+          </select>
+        </div>
+        <div class="fi"><label>行業細項</label>
+          <select id="e-ind-sub" style="min-height:46px;font-size:15px;-webkit-appearance:none;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 10px center;font-family:var(--serif);color:var(--ink);width:100%">
+            <option value="">請先選擇大類</option>
+          </select>
+        </div>
+        <div class="fi"><label>職稱 / 職位</label><input type="text" id="e-job" style="min-height:46px;font-size:15px" placeholder="工程師・業務主管・教師"></div>
+        <div class="fi"><label>父親姓名</label><input type="text" id="e-fa" style="min-height:46px;font-size:15px"></div>
+        <div class="fi"><label>母親（生母）姓名</label><input type="text" id="e-mo" style="min-height:46px;font-size:15px"></div>
+        <div class="fi"><label>出生年份</label><input type="text" id="e-by" style="min-height:46px;font-size:15px" placeholder="民國77年 / 1988"></div>
+        <div class="fi"><label>出生月日時辰</label><input type="text" id="e-bm" style="min-height:46px;font-size:15px" placeholder="三月廿六日戌時"></div>
+        <div class="fi"><label>去世年份</label><input type="text" id="e-dy" style="min-height:46px;font-size:15px" placeholder="（在世者留空）"></div>
+        <div class="fi"><label>去世月日時辰</label><input type="text" id="e-dm" style="min-height:46px;font-size:15px"></div>
+      </div>
+
+      <!-- 編輯：多位配偶區塊 -->
+      <div style="margin-bottom:12px;padding:12px;background:rgba(184,134,11,0.05);border:1px solid rgba(184,134,11,0.2);border-radius:10px">
+        <div style="font-size:12px;font-weight:700;color:var(--gold);font-family:var(--sans);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+          <span>配偶資料（可新增多位）</span>
+          <button type="button" onclick="addEditSpouseRow()" style="font-size:12px;padding:5px 12px;background:var(--red);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:var(--sans);touch-action:manipulation">＋ 新增配偶</button>
+        </div>
+        <div id="edit-spouse-rows"></div>
+        <p style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:4px">前妻選「前妻（離異）」，再婚再點「＋新增配偶」選「繼室」或「現任妻」</p>
+      </div>
+      <div class="fi" style="margin-bottom:10px"><label>備注</label><textarea id="e-nt" style="font-size:15px;min-height:70px;resize:vertical;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--serif);width:100%;background:rgba(255,255,255,0.85);color:var(--ink)"></textarea></div>
+      <div class="fi" style="margin-bottom:14px"><label>填寫人</label><input type="text" id="e-su" style="min-height:46px;font-size:15px"></div>
+      <div style="display:flex;gap:10px">
+        <button onclick="saveEdit()" style="flex:1;padding:14px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:15px;letter-spacing:2px;cursor:pointer;touch-action:manipulation">✅ 儲存修改</button>
+        <button onclick="cancelEdit()" style="padding:14px 16px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-family:var(--serif);font-size:14px;color:var(--ink3);cursor:pointer;touch-action:manipulation">取消</button>
+      </div>
+      <div id="edit-ok" style="display:none;margin-top:10px;padding:12px;background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;color:#1b5e20;font-size:13px;font-family:var(--sans)">✦ 資料已儲存！族譜圖已同步更新。</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   COLOR MAPS
+============================================================ */
+const GC={1:'#5a1010',2:'#7a2020',3:'#8b3510',4:'#7a4b0a',5:'#5a4800',6:'#1f5c30',7:'#0f4a6b',8:'#1a2e7a',9:'#3a1e7a',10:'#6b1a6b',11:'#7a1a3a',12:'#3a1a6b',13:'#1a5a5a',14:'#3a5a1a'};
+const GL={1:'#fff0f0',2:'#ffeded',3:'#fff3ee',4:'#fff8ee',5:'#fffcee',6:'#edfff3',7:'#eef8ff',8:'#eeeeff',9:'#f5eeff',10:'#feeeff',11:'#ffeef5',12:'#f0eeff',13:'#eeffff',14:'#f0ffee'};
+
+/* ============================================================
+   DATABASE
+============================================================ */
+let db=[
+  {id:1,n:'王山公',g:1,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏良娘',lo:'',by:'吉年',bm:'吉月吉日吉時',dy:'吉年',dm:'七月二十二日吉時',nt:'第一代始祖',su:'維杰整理'},
+  {id:2,n:'林氏良娘',g:1,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'王山公',lo:'',by:'吉年',bm:'吉月吉日吉時',dy:'吉年',dm:'五月三日吉時',nt:'',su:''},
+  {id:3,n:'木生公',g:2,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏金娘',lo:'',by:'子年',bm:'吉月吉日吉時',dy:'吉年',dm:'五月二十一日吉時',nt:'',su:''},
+  {id:4,n:'林氏金娘',g:2,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'木生公',lo:'',by:'酉年',bm:'十二月吉日吉時',dy:'吉年',dm:'八月四日吉時',nt:'',su:''},
+  {id:5,n:'尊意公',g:3,sx:'男',r:'祖公',fa:'',mo:'',sp:'游氏柳娘',lo:'',by:'亥年',bm:'三月二十七日吉時',dy:'吉年',dm:'九月三日吉時',nt:'',su:''},
+  {id:6,n:'游氏柳娘',g:3,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'尊意公',lo:'',by:'午年',bm:'吉月吉日吉時',dy:'吉年',dm:'正月十一日吉時',nt:'',su:''},
+  {id:7,n:'成雙公',g:4,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏荊娘',lo:'',by:'牛年',bm:'吉月吉日吉時',dy:'吉年',dm:'六月十八日吉時',nt:'',su:''},
+  {id:8,n:'林氏荊娘',g:4,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'成雙公',lo:'',by:'雍正乙卯年',bm:'九月十三日吉時',dy:'嘉慶丁卯年',dm:'九月十九日酉時',nt:'',su:''},
+  {id:9,n:'媽賞公',g:5,sx:'男',r:'祖公',fa:'',mo:'',sp:'鄭氏合娘',lo:'',by:'乾隆甲牛年',bm:'十月二十五日寅時',dy:'嘉慶卯年',dm:'三月二十三日卯時',nt:'',su:''},
+  {id:10,n:'鄭氏合娘',g:5,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'媽賞公',lo:'',by:'乾隆戊戌年',bm:'二月二日吉時',dy:'嘉慶丙寅年',dm:'七月十二日吉時',nt:'',su:''},
+  {id:11,n:'光輝公',g:6,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏美娘',lo:'',by:'嘉慶戊太年',bm:'九月四日卯時',dy:'咸豐吉年',dm:'二月三日丑時',nt:'',su:''},
+  {id:12,n:'林氏美娘',g:6,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'光輝公',lo:'',by:'乙丑年',bm:'十月九日卯時',dy:'光緒壬辰年',dm:'二月十二日未時',nt:'正室',su:''},
+  {id:13,n:'梁氏粉',g:6,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'光輝公',lo:'',by:'嘉慶乙丑年',bm:'六月九日午時',dy:'道光辛巳年',dm:'四月一日寅時',nt:'次室',su:''},
+  {id:14,n:'新居公',g:7,sx:'男',r:'祖公',fa:'',mo:'',sp:'卓氏農娘',lo:'',by:'道光發年',bm:'八月九日寅時',dy:'明治壬寅年',dm:'十一月十六日亥時',nt:'',su:''},
+  {id:15,n:'卓氏農娘',g:7,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'新居公',lo:'',by:'道光丁酉年',bm:'十二月二十三日酉時',dy:'明治辛乙年',dm:'八月廿四日未時',nt:'正室',su:''},
+  {id:16,n:'周氏腰',g:7,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'新居公',lo:'',by:'道光甲申年',bm:'七月六日申時',dy:'咸豐壬子年',dm:'八月二十二日酉時',nt:'次室',su:''},
+  {id:17,n:'恒春公（義春公）',g:8,sx:'男',r:'祖公',fa:'',mo:'',sp:'陳氏印娘',lo:'',by:'道光丙牛年',bm:'十一月三日申時',dy:'明治壬寅年',dm:'十一月七日未時',nt:'',su:''},
+  {id:18,n:'陳氏印娘',g:8,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'恒春公（義春公）',lo:'',by:'道光庚戌年',bm:'十一月十五日卯時',dy:'昭和癸酉年',dm:'五月十八日酉時',nt:'',su:''},
+  {id:19,n:'景煌公',g:9,sx:'男',r:'長子',fa:'恒春公（義春公）',mo:'陳氏印娘',sp:'陳氏蜜',lo:'',by:'明治辛未年',bm:'十一月二十七日子時',dy:'昭和戌寅年',dm:'二月五日未時',nt:'長子',su:''},
+  {id:20,n:'陳氏蜜',g:9,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'景煌公',lo:'',by:'明治壬申年',bm:'五月二十五日卯時',dy:'昭和丙寅年',dm:'六月十四日戌時',nt:'景煌公配偶',su:''},
+  {id:21,n:'景潭公',g:9,sx:'男',r:'祖公',fa:'',mo:'',sp:'',lo:'',by:'光緒庚辰年',bm:'九月十九日亥時',dy:'光緒戌戌年',dm:'三月十日未時',nt:'另份記載待確認',su:''},
+  {id:22,n:'曾慶璋',g:10,sx:'男',r:'長子',fa:'景煌公',mo:'陳氏蜜',sp:'陳氏救',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:23,n:'陳氏救',g:10,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾慶璋',lo:'',by:'',bm:'',dy:'',dm:'',nt:'慶璋配偶',su:''},
+  {id:24,n:'曾慶材',g:10,sx:'男',r:'次子',fa:'',mo:'',sp:'曾林共',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:25,n:'曾林共',g:10,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾慶材',lo:'',by:'',bm:'',dy:'',dm:'',nt:'慶材配偶',su:''},
+  {id:26,n:'曾添泉',g:10,sx:'男',r:'長子',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:27,n:'曾培元',g:10,sx:'男',r:'次子',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:28,n:'曾氏鳳凰',g:10,sx:'女',r:'長女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:29,n:'曾業鑿',g:11,sx:'男',r:'長子',fa:'曾慶璋',mo:'陳氏救',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:30,n:'曾澄秋',g:11,sx:'男',r:'次子',fa:'曾慶璋',mo:'陳氏救',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:31,n:'曾秋芳',g:11,sx:'男',r:'三子',fa:'曾慶璋',mo:'陳氏救',sp:'張氏寶蓮',lo:'',by:'民國十年',bm:'九月　未時',dy:'民國八十七年',dm:'十一月二十日甲時',nt:'',su:''},
+  {id:32,n:'張氏寶蓮',g:11,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾秋芳',lo:'',by:'民國壬戌年',bm:'十一月十一日亥時',dy:'民國癸卯年',dm:'十月十二日午時',nt:'秋芳配偶',su:''},
+  {id:33,n:'曾公林秋田',g:11,sx:'男',r:'祖公',fa:'',mo:'',sp:'',lo:'',by:'民國廿四年',bm:'十一月廿二日寅時',dy:'民國一○五年',dm:'七月廿六日辰時',nt:'另份記載',su:''},
+  {id:34,n:'曾維珍',g:12,sx:'男',r:'長子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:35,n:'曾維燦',g:12,sx:'男',r:'次子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:36,n:'曾維能',g:12,sx:'男',r:'三子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:37,n:'曾維杰',g:12,sx:'男',r:'四子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'台灣',by:'',bm:'',dy:'',dm:'',nt:'存冊者・造隆電器工程股份有限公司',su:'本人'},
+  {id:38,n:'曾彩絨',g:12,sx:'女',r:'長女',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:39,n:'曾淑真',g:12,sx:'女',r:'次女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:40,n:'曾淑賢',g:12,sx:'女',r:'三女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:41,n:'曾淑華',g:12,sx:'女',r:'四女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+];
+let nid=200;
+
+/* ============================================================
+   DATE CONVERSION: Solar → ROC + Shichen（精確農曆查表法）
+============================================================ */
+const LUNAR_MONTHS_CH=['正','二','三','四','五','六','七','八','九','十','十一','十二'];
+const LUNAR_DAYS_CH=['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+const HEAVENLY=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const EARTHLY=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+/* 精確農曆數據表：每年農曆正月初一的西曆日期 + 每月天數（29或30天）
+   格式：年:[正月初一月份, 正月初一日期, 月份天數陣列(12或13個月)]
+   閏月在對應月份後插入 */
+const LUNAR_TABLE={
+  1920:[2,20,[30,29,30,29,29,30,29,30,29,30,29,30]],
+  1921:[2,8, [30,30,29,30,29,30,29,29,30,29,30,29,30]],// 閏5
+  1922:[1,28,[30,29,30,30,29,29,30,29,29,30,29,30]],
+  1923:[2,16,[29,30,29,30,30,29,30,29,30,29,29,30]],
+  1924:[2,5, [30,29,30,29,30,30,29,30,29,30,29,29,30]],// 閏4
+  1925:[1,24,[30,30,29,29,30,30,29,30,30,29,30,29]],
+  1926:[2,13,[29,30,29,30,29,30,29,30,30,29,30,30]],
+  1927:[2,2, [29,29,30,29,29,30,29,30,30,30,29,30,30]],// 閏2
+  1928:[1,23,[29,30,29,29,30,29,29,30,30,29,30,30]],
+  1929:[2,10,[30,29,30,29,29,30,29,29,30,29,30,30,30]],// 閏6
+  1930:[1,30,[30,29,30,29,30,29,30,29,29,30,29,30]],
+  1931:[2,17,[30,30,29,30,29,30,29,30,29,29,30,29,30]],// 閏3
+  1932:[2,6, [30,29,30,30,29,29,30,29,30,29,29,30]],
+  1933:[1,26,[29,30,29,30,30,29,30,29,30,29,30,29,29]],// 閏11
+  1934:[2,14,[30,29,30,29,30,30,29,30,29,30,29,30]],
+  1935:[2,4, [29,30,29,29,30,30,29,30,30,29,30,29,30]],// 閏4
+  1936:[1,24,[29,30,29,30,29,30,29,30,30,29,30,30]],
+  1937:[2,11,[29,29,30,29,29,30,29,30,30,30,29,30,29]],// 閏2
+  1938:[1,31,[30,29,29,30,29,29,30,29,30,30,29,30]],
+  1939:[2,19,[30,29,30,29,30,29,29,30,29,30,29,30,30]],// 閏7
+  1940:[2,8, [29,30,29,30,29,30,29,29,30,29,30,30]],
+  1941:[1,27,[30,29,30,29,30,29,30,29,29,30,29,30,29]],// 閏6
+  1942:[2,15,[30,30,29,30,30,29,29,30,29,29,30,29]],
+  1943:[2,5, [30,30,29,30,30,29,30,29,30,29,29,30,29]],// 閏4
+  1944:[1,25,[30,30,29,30,29,30,30,29,30,29,30,29]],
+  1945:[2,13,[29,30,29,30,29,30,30,29,30,30,29,29,30]],// 閏-
+  1946:[2,2, [29,30,29,29,30,29,30,29,30,30,30,29]],
+  1947:[1,22,[30,29,30,29,29,30,29,29,30,30,29,30,30]],// 閏2
+  1948:[2,10,[29,30,29,30,29,29,30,29,29,30,29,30]],
+  1949:[1,29,[30,29,30,30,29,29,30,29,30,29,29,30,30]],// 閏7
+  1950:[1,17,[29,30,29,30,30,29,29,30,29,30,29,29]],
+  1951:[2,6, [30,30,29,30,30,29,30,29,30,29,30,29,29]],// 閏5
+  1952:[1,27,[30,29,30,30,29,30,29,30,30,29,29,30]],
+  1953:[2,14,[29,30,29,30,29,30,30,29,30,30,29,30,29]],// 閏8
+  1954:[2,3, [29,30,29,29,30,29,30,30,29,30,30,29]],
+  1955:[1,24,[30,29,30,29,29,30,29,30,29,30,30,30,29]],// 閏3
+  1956:[2,12,[29,30,29,30,29,29,30,29,30,29,30,30]],
+  1957:[1,31,[30,29,30,29,30,29,29,30,29,29,30,30,30]],// 閏8
+  1958:[2,18,[29,30,29,30,29,30,29,29,30,29,29,30]],
+  1959:[2,8, [30,29,30,30,29,30,29,30,29,30,29,29,30]],// 閏4
+  1960:[1,28,[29,30,29,30,30,29,30,29,30,29,30,29]],
+  1961:[2,15,[30,29,29,30,30,29,30,30,29,30,29,30,29]],// 閏3
+  1962:[2,5, [29,30,29,29,30,29,30,30,29,30,30,29]],
+  1963:[1,25,[30,29,30,29,29,30,29,30,29,30,30,30,29]],// 閏1
+  1964:[2,13,[29,30,29,30,29,29,30,29,30,29,30,30]],
+  1965:[2,2, [29,30,29,30,29,30,29,29,30,29,30,29,30]],// 閏5
+  1966:[1,21,[30,29,30,29,30,29,30,29,29,30,29,30]],
+  1967:[2,9, [29,30,30,29,30,29,30,29,30,29,30,29,29]],// 閏3
+  1968:[1,29,[30,30,29,30,29,30,29,30,30,29,29,30]],
+  1969:[2,17,[29,30,29,30,29,30,29,30,30,29,30,29,30]],// 閏2
+  1970:[2,6, [29,29,30,29,30,29,30,29,30,30,29,30]],
+  1971:[1,27,[29,30,29,30,29,29,30,29,30,30,29,30,30]],// 閏5
+  1972:[2,15,[29,29,30,29,30,29,29,30,29,30,29,30]],
+  1973:[2,3, [30,29,30,29,30,29,29,30,29,29,30,30,30]],// 閏4
+  1974:[1,23,[29,30,29,30,29,30,29,29,30,29,29,30]],
+  1975:[2,11,[30,29,30,30,29,30,29,30,29,30,29,29,30]],// 閏8
+  1976:[1,31,[29,30,29,30,30,29,30,29,30,29,30,29]],
+  1977:[2,18,[30,29,30,29,30,29,30,30,29,30,29,30,29]],// 閏7
+  1978:[2,7, [29,30,29,30,29,30,29,30,30,29,30,29]],
+  1979:[1,28,[30,29,29,30,29,30,29,30,30,30,29,30,29]],// 閏6
+  1980:[2,16,[29,30,29,29,30,29,30,29,30,30,29,30]],
+  1981:[2,5, [29,30,29,30,29,29,30,29,29,30,29,30,30]],// 閏4
+  1982:[1,25,[30,29,30,29,30,29,29,30,29,29,30,29]],
+  1983:[2,13,[30,30,29,30,30,29,29,30,29,30,29,29,30]],// 閏11
+  1984:[2,2, [29,30,29,30,30,29,30,29,30,29,30,29]],
+  1985:[2,20,[29,30,29,30,29,30,30,29,30,29,30,30,29]],// 閏6
+  1986:[2,9, [29,29,30,29,30,29,30,30,29,30,30,29]],
+  1987:[1,29,[30,29,29,30,29,29,30,30,29,30,30,30,29]],// 閏6
+  1988:[2,17,[30,29,29,30,29,30,29,30,29,30,30,30]],
+  1989:[2,6, [29,30,30,29,30,29,30,29,29,30,29,30]],
+  1990:[1,27,[29,30,30,29,30,30,29,30,29,29,30,29,30]],// 閏5
+  1991:[2,15,[29,29,30,30,29,30,30,29,30,29,29,30]],
+  1992:[2,4, [29,30,29,30,29,30,30,29,30,30,29,29,30]],// 閏3
+  1993:[1,23,[29,30,29,29,30,29,30,30,29,30,30,29]],
+  1994:[2,10,[30,29,30,29,29,30,29,30,29,30,30,30,29]],// 閏8
+  1995:[1,31,[29,30,29,30,29,29,30,29,30,29,30,30]],
+  1996:[2,19,[29,30,29,30,29,30,29,29,30,29,30,29,30]],// 閏8
+  1997:[2,7, [30,29,30,29,30,29,29,30,29,30,29,30]],
+  1998:[1,28,[29,30,30,29,29,30,29,29,30,29,30,30,29]],// 閏5
+  1999:[2,16,[30,29,30,30,29,29,30,29,29,30,29,29]],
+  2000:[2,5, [30,30,29,30,30,29,29,30,29,29,30,29,30]],// 閏8
+  2001:[1,24,[29,30,29,30,30,29,30,29,30,29,29,30]],
+  2002:[2,12,[29,30,29,30,29,30,30,29,30,30,29,29,30]],// 閏4
+  2003:[2,1, [29,29,30,29,30,29,30,30,29,30,30,29]],
+  2004:[1,22,[29,30,29,29,30,29,30,30,30,29,30,30,29]],// 閏2
+  2005:[2,9, [29,30,29,29,30,29,30,29,30,30,29,30]],
+  2006:[1,29,[30,29,30,29,29,30,29,29,30,30,29,30,30]],// 閏7
+  2007:[2,18,[29,30,29,30,29,29,30,29,29,30,29,30]],
+  2008:[2,7, [30,29,30,30,29,29,30,29,30,29,29,30,29]],// 閏12
+  2009:[1,26,[30,30,29,30,29,30,29,30,29,30,29,29]],
+  2010:[2,14,[30,30,29,30,29,30,30,29,30,29,30,29,29]],// 閏6
+  2011:[2,3, [30,29,30,29,30,29,30,30,29,30,29,30]],
+  2012:[1,23,[29,30,29,30,29,30,29,30,29,30,30,29,30]],// 閏4
+  2013:[2,10,[29,30,29,29,30,29,30,29,30,30,30,29]],
+  2014:[1,31,[29,30,29,30,29,29,30,29,30,29,30,30,30]],// 閏9
+  2015:[2,19,[29,29,30,29,29,30,29,30,29,30,30,30]],
+  2016:[2,8, [29,30,29,30,29,29,30,29,29,30,29,30,30]],// 閏6
+  2017:[1,28,[29,30,29,30,30,29,29,30,29,29,30,29]],
+  2018:[2,16,[30,29,30,30,29,30,29,30,29,30,29,29,29]],// 閏6
+  2019:[2,5, [30,30,29,30,29,30,29,30,30,29,30,29]],
+  2020:[1,25,[29,30,29,30,29,30,30,29,30,30,29,29,30]],// 閏4
+  2021:[2,12,[29,30,29,29,30,29,30,30,29,30,30,29]],
+  2022:[2,1, [30,29,30,29,29,30,29,30,29,30,30,30,29]],// 閏2
+  2023:[1,22,[29,30,29,30,29,29,30,29,30,29,30,30]],
+  2024:[2,10,[29,30,29,30,29,30,29,29,30,29,30,29,30]],// 閏6
+  2025:[1,29,[29,30,30,29,30,29,30,29,29,30,29,30]],
+  2026:[2,17,[29,30,30,29,30,29,30,30,29,29,30,29,30]],// 閏6
+  2027:[2,6, [29,29,30,29,30,29,30,30,29,30,30,29]],
+  2028:[1,26,[29,30,29,29,30,29,30,30,29,30,30,30,29]],// 閏5
+  2029:[2,13,[29,29,30,29,29,30,29,30,30,29,30,30]],
+  2030:[2,3, [29,30,29,30,29,29,30,29,30,29,30,30,30]],// 閏3
+};
+
+function solarToLunar(year,month,day){
+  // 找當年或上一年的農曆資料
+  let lunarYear=year;
+  let data=LUNAR_TABLE[lunarYear];
+  if(!data){
+    // 沒有精確資料，用近似法
+    return {month:month,day:day,year:year};
+  }
+  const nyM=data[0],nyD=data[1],mDays=data[2];
+  const newYear=new Date(lunarYear,nyM-1,nyD);
+  const target=new Date(year,month-1,day);
+  let diff=Math.round((target-newYear)/(864e5));
+  
+  if(diff<0){
+    // 在農曆新年之前，用上一年資料
+    lunarYear=year-1;
+    data=LUNAR_TABLE[lunarYear];
+    if(!data)return{month:month,day:day,year:year};
+    const nyM2=data[0],nyD2=data[1],mDays2=data[2];
+    const newYear2=new Date(lunarYear,nyM2-1,nyD2);
+    diff=Math.round((target-newYear2)/(864e5));
+    let lm=0,ld=0;
+    for(let i=0;i<mDays2.length;i++){
+      if(diff<mDays2[i]){lm=i+1;ld=diff+1;break;}
+      diff-=mDays2[i];
+    }
+    return{month:lm||1,day:ld||1,year:lunarYear};
+  }
+  
+  let lm=0,ld=0;
+  for(let i=0;i<mDays.length;i++){
+    if(diff<mDays[i]){lm=i+1;ld=diff+1;break;}
+    diff-=mDays[i];
+  }
+  // 閏月調整：若超過12個月，標準月份仍取1-12
+  if(lm>12)lm=12;
+  return{month:lm||1,day:ld||1,year:lunarYear};
+}
+
+function getShichen(hour){
+  if(hour>=23||hour<1)return '子時';
+  if(hour<3)return '丑時';if(hour<5)return '寅時';if(hour<7)return '卯時';
+  if(hour<9)return '辰時';if(hour<11)return '巳時';if(hour<13)return '午時';
+  if(hour<15)return '未時';if(hour<17)return '申時';if(hour<19)return '酉時';
+  if(hour<21)return '戌時';return '亥時';
+}
+
+function getROCYear(year){
+  if(year<=1911)return '清朝'+year+'年';
+  return '民國'+(year-1911)+'年';
+}
+
+function getSexagenary(year){
+  return HEAVENLY[(year-4)%10]+EARTHLY[(year-4)%12]+'年';
+}
+
+function convertDateText(type){
+  const dateVal=(document.getElementById(type==='b'?'fbd':'fdd').value||'').trim();
+  const timeVal=(document.getElementById(type==='b'?'fbt':'fdt').value||'').trim();
+  const resultEl=document.getElementById(type==='b'?'fb-result':'fd-result');
+  const byEl=document.getElementById(type==='b'?'fby':'fdy');
+  const bmEl=document.getElementById(type==='b'?'fbm':'fdm');
+  if(!dateVal){resultEl.style.display='none';return;}
+  const parts=dateVal.replace(/-/g,'/').split('/');
+  if(parts.length<3){resultEl.style.display='none';return;}
+  const year=parseInt(parts[0]),month=parseInt(parts[1]),day=parseInt(parts[2]);
+  if(!year||!month||!day||year<1800||year>2100){resultEl.style.display='none';return;}
+
+  const roc=getROCYear(year);
+  const sexag=getSexagenary(year);
+  const lunar=solarToLunar(year,month,day);
+  const lunarMonth=LUNAR_MONTHS_CH[lunar.month-1]||'';
+  const lunarDay=LUNAR_DAYS_CH[lunar.day-1]||'';
+  const lunarStr='農曆'+lunarMonth+'月'+lunarDay;
+
+  let shichen='',timeDisp='',ampm='';
+  if(timeVal){
+    const tp=timeVal.split(':');
+    const h=parseInt(tp[0])||0,mi=parseInt(tp[1])||0;
+    shichen=getShichen(h);
+    ampm=h<12?'上午':'下午';
+    timeDisp=ampm+(h%12||12)+':'+String(mi).padStart(2,'0');
+  }
+
+  const rocFull=roc+'（'+sexag+'）';
+  // 西元格式
+  const solarFull=year+'年'+month+'月'+day+'日'+(timeDisp?' '+timeDisp:'');
+  // 農曆格式（含時辰）
+  const lunarFull=lunarStr+(shichen?' '+shichen:'');
+  // 民國+農曆格式（填入欄位用）
+  const fieldBy='西元'+solarFull+' ／ '+rocFull;
+  const fieldBm=lunarFull;
+
+  resultEl.innerHTML=
+    '<div style="margin-bottom:3px">📅 <strong>西元 '+year+'年'+month+'月'+day+'日</strong>'+(timeDisp?' <span style="color:var(--blue)">'+timeDisp+'</span>':'')+' → <span style="color:var(--red)">'+shichen+'</span></div>'
+    +'<div style="margin-bottom:3px">🏛️ <strong>'+rocFull+'</strong></div>'
+    +'<div>🌙 <strong style="color:var(--jade)">'+lunarFull+'</strong></div>';
+  resultEl.style.display='block';
+
+  // 自動填入欄位：同時保留西元和農曆
+  byEl.value='西元'+year+'/'+String(month).padStart(2,'0')+'/'+String(day).padStart(2,'0')+' ／ '+roc+'（'+sexag+'）';
+  bmEl.value=lunarFull;
+}
+
+/* ============================================================
+   PARENT SEARCH
+============================================================ */
+let parentTimers={ffa:null,fmo:null};
+
+function searchParent(field){
+  clearTimeout(parentTimers[field]);
+  parentTimers[field]=setTimeout(()=>{
+    const q=(document.getElementById(field+'-input').value||'').trim();
+    const dd=document.getElementById(field+'-dd');
+    const currentGen=parseInt(document.getElementById('fg2').value)||0;
+    
+    let candidates=db.filter(m=>{
+      if(!m.n.includes(q)&&q.length>0)return false;
+      return true;
+    });
+    if(candidates.length===0&&q.length===0)candidates=db.slice(0,20);
+    candidates=candidates.slice(0,15);
+    
+    if(candidates.length===0){
+      dd.innerHTML='<div class="parent-opt" style="color:#7a5c30">查無符合族人</div>';
+      dd.classList.add('open');return;
+    }
+    dd.innerHTML=candidates.map(m=>`
+      <div class="parent-opt" onclick="selectParent('${field}',${m.id})">
+        <span>${m.n}</span>
+        <span class="parent-opt-gen">第${m.g}代</span>
+        <span class="parent-opt-role">${m.r||''} ${m.sx||''}</span>
+      </div>`).join('');
+    dd.classList.add('open');
+  },200);
+}
+
+function selectParent(field,id){
+  const m=db.find(d=>d.id===id);if(!m)return;
+  document.getElementById(field).value=m.n;
+  document.getElementById(field+'-input').value='';
+  document.getElementById(field+'-dd').classList.remove('open');
+  const sel=document.getElementById(field+'-sel');
+  document.getElementById(field+'-sel-txt').textContent=`${m.n}（第${m.g}代・${m.r||''}）`;
+  sel.style.display='flex';
+}
+
+function clearParent(field){
+  document.getElementById(field).value='';
+  document.getElementById(field+'-input').value='';
+  document.getElementById(field+'-sel').style.display='none';
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.parent-search-wrap')){
+    document.querySelectorAll('.parent-dropdown').forEach(d=>d.classList.remove('open'));
+  }
+});
+
+/* ============================================================
+   TABS
+============================================================ */
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='mem')renderM();
+  if(id==='tree')buildTree();
+  if(id==='search'){buildIndustryFilter();doSearch();}
+}
+
+/* ============================================================
+   TREE — FIXED: rebuilds fully on every call
+============================================================ */
+const NW=102,NH=33,HG=9,C1=44,C2=510;
+
+function buildTree(){
+  // Clear everything
+  document.getElementById('tn').innerHTML='';
+  document.getElementById('tl').innerHTML='';
+  const pos={};
+  const svg=document.getElementById('tsvg');
+
+  // ---- Left col: gen 1-8 ----
+  [1,2,3,4,5,6,7,8].forEach((g,gi)=>{
+    const ms=db.filter(m=>m.g===g);
+    const ry=26+gi*80;
+    ms.forEach((m,i)=>{
+      const x=C1+20+i*(NW+HG);
+      pos[m.id]={x,y:ry,cx:x+NW/2,cy:ry+NH/2};
+      mkNode(m,x,ry);
+    });
+    mkt('tl','第'+g+'代',C1+14,ry+NH/2+5,10,GC[g]||'#555','end');
+    if(ms.length>=2){
+      const a=pos[ms[0].id],b=pos[ms[1].id];
+      mkl('tl',a.x+NW,a.cy,b.x,b.cy,'rgba(139,105,20,0.3)',0.8,'4 3');
+    }
+    if(gi<7){
+      const ax=ms.reduce((s,m)=>s+pos[m.id].cx,0)/ms.length;
+      mkl('tl',ax,ry+NH,ax,ry+80,GC[g]||'#aaa',0.6,'3 3');
+    }
+  });
+
+  // ---- Right col: gen 9+ (dynamic, includes newly added members) ----
+  const maxGen=Math.max(...db.map(m=>m.g));
+  for(let g=9;g<=maxGen;g++){
+    const ms=db.filter(m=>m.g===g);
+    if(ms.length===0)continue;
+    const gi=g-9;
+    const rowH=Math.ceil(ms.length/4)*(NH+8)+80;
+    const ry=26+gi*Math.max(160, rowH);
+    const cols=Math.min(ms.length,4);
+    ms.forEach((m,i)=>{
+      const c=i%cols,r=Math.floor(i/cols);
+      const x=C2+c*(NW+HG),y=ry+r*(NH+8);
+      pos[m.id]={x,y,cx:x+NW/2,cy:y+NH/2};
+      mkNode(m,x,y);
+    });
+    mkt('tl','第'+g+'代',C2-5,ry+NH/2+5,10,GC[g]||'#555','end');
+    // Connect to next gen
+    const nextMs=db.filter(m=>m.g===g+1);
+    if(nextMs.length>0&&ms[0]){
+      const p=pos[ms[0].id];
+      if(p) mkl('tl',p.cx,ry+NH,p.cx,ry+160,GC[g]||'#aaa',0.6,'3 3');
+    }
+  }
+
+  // Bridge arrow gen8 → gen9
+  const g8=db.filter(m=>m.g===8),g9=db.filter(m=>m.g===9);
+  if(g8[0]&&g9[0]){
+    const p8=pos[g8[0].id],p9=pos[g9[0].id];
+    if(p8&&p9){
+      const path=mkS('path');
+      path.setAttribute('d',`M${p8.cx} ${p8.y+NH} L${p8.cx} ${p8.y+NH+16} L${p9.cx} ${p8.y+NH+16} L${p9.cx} ${p9.y}`);
+      path.setAttribute('fill','none');path.setAttribute('stroke','rgba(139,105,20,0.4)');
+      path.setAttribute('stroke-width','1');path.setAttribute('stroke-dasharray','5 3');
+      path.setAttribute('marker-end','url(#arr)');
+      document.getElementById('tl').appendChild(path);
+      mkt('tl','子孫相傳',(p8.cx+p9.cx)/2,p8.y+NH+10,9,'rgba(139,105,20,0.6)','middle');
+    }
+  }
+
+  // Divider
+  const dv=mkS('line');
+  ['x1','y1','x2','y2'].forEach((a,i)=>dv.setAttribute(a,[480,6,480,770][i]));
+  dv.setAttribute('stroke','rgba(139,105,20,0.15)');dv.setAttribute('stroke-width','0.5');
+  dv.setAttribute('stroke-dasharray','8 4');
+  document.getElementById('tl').insertBefore(dv,document.getElementById('tl').firstChild);
+  mkt('tn','直系（一至八代）',232,12,10,'rgba(139,105,20,0.6)','middle');
+  mkt('tn','九代以後子孫',720,12,10,'rgba(139,105,20,0.6)','middle');
+
+  // Resize SVG viewBox to fit all content
+  const allNodes=document.querySelectorAll('#tn rect');
+  let maxX=900,maxY=780;
+  allNodes.forEach(r=>{
+    const x=parseFloat(r.getAttribute('x')||0)+parseFloat(r.getAttribute('width')||0);
+    const y=parseFloat(r.getAttribute('y')||0)+parseFloat(r.getAttribute('height')||0);
+    if(x>maxX)maxX=x;if(y>maxY)maxY=y;
+  });
+  svg.setAttribute('viewBox',`0 0 ${maxX+20} ${maxY+30}`);
+  svg.setAttribute('width',maxX+20);
+  svg.setAttribute('height',maxY+30);
+}
+
+function mkNode(m,x,y){
+  const g=mkS('g');
+  g.setAttribute('class','t-node');g.dataset.id=m.id;
+  g.addEventListener('click',()=>showND(m.id));
+  const rect=mkS('rect');
+  rect.setAttribute('x',x);rect.setAttribute('y',y);
+  rect.setAttribute('width',NW);rect.setAttribute('height',NH);rect.setAttribute('rx','6');
+  rect.setAttribute('fill',GL[m.g]||'#f9f9f9');
+  rect.setAttribute('stroke',GC[m.g]||'#888');
+  rect.setAttribute('stroke-width',m.id===37?'2.5':m.sx==='男'?'1.5':'0.8');
+  const t=mkS('text');
+  const sn=m.n.length>6?m.n.slice(0,6)+'…':m.n;
+  t.setAttribute('x',x+NW/2);t.setAttribute('y',y+NH/2);
+  t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');
+  t.setAttribute('font-size','12');t.setAttribute('font-weight','500');
+  t.setAttribute('fill',GC[m.g]||'#555');t.setAttribute('font-family','Noto Serif TC,serif');
+  t.textContent=sn;
+  g.appendChild(rect);g.appendChild(t);
+  document.getElementById('tn').appendChild(g);
+}
+
+function showND(id){
+  const m=db.find(d=>d.id===id);if(!m)return;
+  document.querySelectorAll('.t-node').forEach(n=>n.style.opacity='0.65');
+  document.querySelector(`.t-node[data-id="${id}"]`).style.opacity='1';
+  const box=document.getElementById('ndb');box.style.display='block';
+  document.getElementById('ndn').textContent=m.n;
+  document.getElementById('ndt').innerHTML=
+    `<span class="tag tg">第${m.g}代</span>`+
+    (m.r?`<span class="tag tr">${m.r}</span>`:'')+
+    (m.sx?`<span class="tag" style="background:#f5f5f5;color:#555;border-color:#ddd">${m.sx}</span>`:'');
+
+  let html='';
+
+  // 在世狀態
+  const aliveStatus=m.alive||(m.dy?'已故':'在世');
+  const aliveColor=aliveStatus==='已故'?'#999':aliveStatus==='在世'?'var(--jade)':'#b8860b';
+  const aliveIcon=aliveStatus==='已故'?'🕯':aliveStatus==='在世'?'✅':'❓';
+  html+='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;margin-bottom:2px;border-bottom:1px solid rgba(139,105,20,0.09)">'
+    +'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);width:66px;flex-shrink:0">在世狀態</span>'
+    +'<span style="font-size:14px;font-weight:600;color:'+aliveColor+'">'+aliveIcon+' '+aliveStatus+'</span>'
+    +'</div>';
+
+  // 基本資料
+  const basicRows=[
+    ['出生',m.by?(m.by+(m.bm?' · '+m.bm:'')):''],
+    ['去世',m.dy?(m.dy+(m.dm?' · '+m.dm:'')):''],
+    ['現居',m.lo],['備注',m.nt]
+  ];
+  basicRows.filter(r=>r[1]).forEach(r=>{
+    html+=`<div class="nd-row"><div class="nd-lbl">${r[0]}</div><div class="nd-val">${r[1]}</div></div>`;
+  });
+  // 聯繫方式
+  if(m.job||m.indCat){
+    const jobStr=(m.job?m.job:'')+(m.job&&m.indCat?' ／ ':'')+( m.indCat?m.indCat+(m.indSub?' · '+m.indSub:''):'');
+    html+='<div class="nd-row"><div class="nd-lbl">💼 職業</div><div class="nd-val" style="font-weight:500;color:var(--ink)">'+jobStr+'</div></div>';
+  }
+  if(m.tel) html+='<div class="nd-row"><div class="nd-lbl">📞 電話</div><div class="nd-val"><a href="tel:'+m.tel+'" style="color:var(--blue);text-decoration:none">'+m.tel+'</a></div></div>';
+  if(m.email) html+='<div class="nd-row"><div class="nd-lbl">✉️ Email</div><div class="nd-val"><a href="mailto:'+m.email+'" style="color:var(--blue);text-decoration:none;word-break:break-all">'+m.email+'</a></div></div>';
+
+  // 配偶資料 — 支援多位（spouses陣列）+ 舊版sp欄位
+  const allSpouses=[];
+  if(m.spouses&&m.spouses.length>0){
+    m.spouses.forEach(s=>allSpouses.push({name:s.name,rel:s.rel}));
+  } else if(m.sp){
+    allSpouses.push({name:m.sp,rel:'配偶'});
+  }
+  // 也找db中sp指向此人的記錄
+  db.filter(s=>s.sp&&s.sp.trim()===m.n.trim()&&s.id!==m.id).forEach(s=>{
+    if(!allSpouses.find(x=>x.name===s.n))
+      allSpouses.push({name:s.n,rel:s.r||'配偶',dbId:s.id});
+  });
+
+  if(allSpouses.length>0){
+    html+=`<div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--gold);font-family:var(--sans);letter-spacing:1px;padding:6px 0 4px;border-top:1px solid rgba(139,105,20,0.15)">配偶（共${allSpouses.length}位）</div>`;
+    allSpouses.forEach(sp=>{
+      const dbSp=db.find(d=>d.n.trim()===sp.name.trim());
+      const isDivorced=sp.rel&&(sp.rel.includes('前妻')||sp.rel.includes('前夫')||sp.rel.includes('離異'));
+      const relTag=sp.rel&&sp.rel!=='配偶'?`<span style="font-size:11px;font-family:var(--sans);padding:1px 7px;border-radius:10px;background:${isDivorced?'rgba(139,26,26,0.1)':'rgba(184,134,11,0.12)'};color:${isDivorced?'var(--red)':'var(--gold)'};margin-left:6px">${sp.rel}</span>`:'';
+      if(dbSp){
+        html+=`<div class="nd-row" style="cursor:pointer;background:rgba(184,134,11,0.04);border-radius:6px;padding:7px 8px;margin-bottom:4px" onclick="showND(${dbSp.id})">
+          <div class="nd-lbl" style="color:var(--gold)">👫</div>
+          <div class="nd-val">
+            <span style="font-weight:500;color:${isDivorced?'var(--ink3)':'var(--red)'};${isDivorced?'text-decoration:line-through;':''}">${dbSp.n}</span>${relTag}<br>
+            ${dbSp.by?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於：'+dbSp.by+(dbSp.bm?' '+dbSp.bm:'')+'</span>':''}
+            ${dbSp.dy?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">卒於：'+dbSp.dy+(dbSp.dm?' '+dbSp.dm:'')+'</span>':''}
+            <span style="font-size:11px;color:var(--blue);font-family:var(--sans);margin-left:6px">▶ 點擊查看</span>
+          </div>
+        </div>`;
+      } else {
+        // 配偶未在族譜中，但可能有填生卒資料
+        const spBy=sp.by||''; const spBm=sp.bm||''; const spDy=sp.dy||''; const spDm=sp.dm||'';
+        html+=`<div class="nd-row" style="background:rgba(184,134,11,0.04);border-radius:6px;padding:7px 8px;margin-bottom:4px">
+          <div class="nd-lbl" style="color:var(--gold)">👫</div>
+          <div class="nd-val">
+            <span style="font-weight:500;color:${isDivorced?'var(--ink3)':'var(--red)'};${isDivorced?'text-decoration:line-through;':''}">${sp.name}</span>${relTag}
+            ${spBy?'<br><span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於：'+spBy+(spBm?' '+spBm:'')+'</span>':''}
+            ${spDy?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">卒於：'+spDy+(spDm?' '+spDm:'')+'</span>':''}
+            ${!spBy&&!spDy?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">（暫無詳細資料）</span>':''}
+          </div>
+        </div>`;
+      }
+    });
+  }
+
+  // 子女資料（從db找出以此人為父或母的成員）
+  const children=db.filter(c=>{
+    const fMatch=c.fa&&c.fa.trim()===m.n.trim();
+    const mMatch=c.mo&&c.mo.trim()===m.n.trim();
+    return fMatch||mMatch;
+  });
+  if(children.length>0){
+    html+=`<div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--jade);font-family:var(--sans);letter-spacing:1px;padding:6px 0 4px;border-top:1px solid rgba(139,105,20,0.15)">子女（共${children.length}位）</div>`;
+    children.forEach(c=>{
+      html+=`<div class="nd-row" style="cursor:pointer;background:rgba(31,107,64,0.04);border-radius:6px;padding:7px 8px;margin-bottom:4px" onclick="showND(${c.id})">
+        <div class="nd-lbl" style="color:var(--jade)">${c.sx==='男'?'👦':'👧'}</div>
+        <div class="nd-val">
+          <span style="font-weight:500;color:var(--red)">${c.n}</span>
+          <span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">${c.r||''} ${c.sx||''}</span><br>
+          ${c.sp?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">配偶：'+c.sp+'</span>':''}
+          ${c.by?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">生：'+c.by+'</span>':''}
+          ${c.lo?'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">📍'+c.lo+'</span>':''}
+        </div>
+      </div>`;
+    });
+  }
+
+  // 父母資料
+  const father=db.find(p=>p.n===m.fa);
+  const mother=db.find(p=>p.n===m.mo);
+  if(father||mother||m.fa||m.mo){
+    html+=`<div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--blue);font-family:var(--sans);letter-spacing:1px;padding:6px 0 4px;border-top:1px solid rgba(139,105,20,0.15)">父母</div>`;
+    if(father){
+      html+=`<div class="nd-row" style="cursor:pointer;background:rgba(26,74,139,0.04);border-radius:6px;padding:7px 8px;margin-bottom:4px" onclick="showND(${father.id})">
+        <div class="nd-lbl" style="color:var(--blue)">父</div>
+        <div class="nd-val"><span style="font-weight:500;color:var(--red)">${father.n}</span><span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">第${father.g}代 ▶ 點擊查看</span></div>
+      </div>`;
+    } else if(m.fa){
+      html+=`<div class="nd-row"><div class="nd-lbl" style="color:var(--blue)">父</div><div class="nd-val">${m.fa}</div></div>`;
+    }
+    if(mother){
+      html+=`<div class="nd-row" style="cursor:pointer;background:rgba(26,74,139,0.04);border-radius:6px;padding:7px 8px;margin-bottom:4px" onclick="showND(${mother.id})">
+        <div class="nd-lbl" style="color:var(--blue)">母</div>
+        <div class="nd-val"><span style="font-weight:500;color:var(--red)">${mother.n}</span><span style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-left:6px">第${mother.g}代 ▶ 點擊查看</span></div>
+      </div>`;
+    } else if(m.mo){
+      html+=`<div class="nd-row"><div class="nd-lbl" style="color:var(--blue)">母</div><div class="nd-val">${m.mo}</div></div>`;
+    }
+  }
+
+  // 加入在世狀態
+  html='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;margin-bottom:4px;border-bottom:1px solid rgba(139,105,20,0.09)">'
+    +'<span style="font-size:11px;color:var(--ink3);font-family:var(--sans);width:66px;flex-shrink:0">在世狀態</span>'
+    +'<span style="font-size:14px;font-weight:500;color:'+aliveColor+'">'+aliveIcon+' '+aliveStatus+'</span>'
+    +'</div>'+html;
+  // 加入電話和Email
+  if(m.tel) html+='<div class="nd-row"><div class="nd-lbl">📞 電話</div><div class="nd-val"><a href="tel:'+m.tel+'" style="color:var(--blue);text-decoration:none">'+m.tel+'</a></div></div>';
+  if(m.email) html+='<div class="nd-row"><div class="nd-lbl">✉️ Email</div><div class="nd-val"><a href="mailto:'+m.email+'" style="color:var(--blue);text-decoration:none;word-break:break-all">'+m.email+'</a></div></div>';
+  if(!html.replace(/<[^>]+>/g,'').trim()) html='<div style="font-size:13px;color:#7a5c30;padding:8px 0">（暫無詳細記載，歡迎族人補充）</div>';
+  document.getElementById('ndr').innerHTML=html;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function mkS(t){return document.createElementNS('http://www.w3.org/2000/svg',t)}
+function mkt(p,txt,x,y,sz,fill,a){
+  const t=mkS('text');t.setAttribute('x',x);t.setAttribute('y',y);
+  t.setAttribute('font-size',sz);t.setAttribute('fill',fill);t.setAttribute('text-anchor',a||'start');
+  t.setAttribute('font-family','Noto Serif TC,serif');t.textContent=txt;
+  document.getElementById(p).appendChild(t);
+}
+function mkl(p,x1,y1,x2,y2,stroke,sw,dash){
+  const l=mkS('line');
+  ['x1','y1','x2','y2'].forEach((a,i)=>l.setAttribute(a,[x1,y1,x2,y2][i]));
+  l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',sw);
+  if(dash)l.setAttribute('stroke-dasharray',dash);
+  document.getElementById(p).appendChild(l);
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+let currentIndFilter='';
+
+function filterByIndustry(cat){
+  currentIndFilter=cat;
+  document.querySelectorAll('.ind-tag').forEach(function(b){
+    b.classList.toggle('active-ind',b.dataset.cat===cat||(cat===''&&b.dataset.cat===''));
+  });
+  doSearch();
+}
+
+function buildIndustryFilter(){
+  // 統計各行業族人數
+  const counts={};
+  db.forEach(function(m){if(m.indCat){counts[m.indCat]=(counts[m.indCat]||0)+1;}});
+  const btns=document.getElementById('ind-filter-btns');
+  if(!btns)return;
+  btns.innerHTML='<button class="ind-tag '+(currentIndFilter===''?'active-ind':'')+'" data-cat="" onclick="filterByIndustry(\'\')">全部 ('+db.length+')</button>';
+  Object.keys(counts).sort().forEach(function(cat){
+    btns.innerHTML+='<button class="ind-tag '+(currentIndFilter===cat?'active-ind':'')+'" data-cat="'+cat+'" onclick="filterByIndustry(\''+cat.replace(/'/g,"\\'")+'\')">'
+      +cat+' ('+counts[cat]+')</button>';
+  });
+  // 統計圖表
+  const stats=document.getElementById('ind-stats');
+  if(!stats)return;
+  if(Object.keys(counts).length===0){stats.innerHTML='';return;}
+  const total=Object.values(counts).reduce(function(a,b){return a+b;},0);
+  let barsHtml='<div style="font-size:12px;color:var(--ink3);font-family:var(--sans);margin-bottom:6px">族人行業分布（共'+total+'位有填寫）：</div>';
+  Object.entries(counts).sort(function(a,b){return b[1]-a[1];}).forEach(function(e){
+    const pct=Math.round(e[1]/total*100);
+    const w=Math.max(pct,3);
+    barsHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;cursor:pointer" onclick="filterByIndustry(\''+e[0].replace(/'/g,"\\'")+'\''+')">'
+      +'<div style="font-size:11px;font-family:var(--sans);width:120px;flex-shrink:0;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+e[0]+'</div>'
+      +'<div style="flex:1;background:var(--parch2);border-radius:4px;height:14px;overflow:hidden">'
+        +'<div style="width:'+w+'%;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width 0.3s"></div>'
+      +'</div>'
+      +'<div style="font-size:11px;font-family:var(--sans);color:var(--ink3);width:36px;text-align:right">'+e[1]+'人</div>'
+    +'</div>';
+  });
+  stats.innerHTML=barsHtml;
+}
+
+function doSearch(){
+  const q=(document.getElementById('sq').value||'').trim();
+  const el=document.getElementById('sr');
+  if(!q){el.innerHTML='<div class="no-r">請輸入姓名或代數進行搜尋</div>';return;}
+  const gm=q.match(/第?(\d+|[一二三四五六七八九十]+)代/);
+  let res=db.filter(function(m){
+    // 行業篩選
+    if(currentIndFilter&&m.indCat!==currentIndFilter)return false;
+    if(!q)return true;
+    if(gm)return m.g===pch(gm[1])||m.n.includes(q);
+    return m.n.includes(q)||String(m.g)===q
+      ||(m.indCat&&m.indCat.includes(q))
+      ||(m.indSub&&m.indSub.includes(q))
+      ||(m.job&&m.job.includes(q))
+      ||(m.tel&&m.tel.includes(q))
+      ||(m.lo&&m.lo.includes(q));
+  });
+  if(!res.length){
+    el.innerHTML='<div class="no-r">查無符合族人'+(currentIndFilter?'（'+currentIndFilter+'）':'')+'，請嘗試其他關鍵字</div>';
+    return;
+  }
+  el.innerHTML=res.map(m=>`
+    <div class="rc" onclick="oM(${m.id})">
+      <div class="rc-n">${m.n}</div>
+      <div class="rc-i">第${m.g}代 ${m.r||''} ${m.sx||''}${m.sp?' ｜ 配偶：'+m.sp:''}${m.fa?' ｜ 父：'+m.fa:''}<br>
+      ${m.by?'生：'+m.by+(m.bm?' '+m.bm:''):''}${m.dy?' ／ 卒：'+m.dy+(m.dm?' '+m.dm:''):''}
+      ${!m.by&&!m.dy?'（暫無生卒記載）':''}${m.lo?' ｜ 現居：'+m.lo:''}
+      ${(m.alive||(m.dy?'已故':'在世'))==='已故'?' ｜ 🕯 已故':(m.alive||(m.dy?'已故':'在世'))==='在世'?' ｜ ✅ 在世':' ｜ ❓ 不詳'}
+      ${(m.job||m.indCat)?'<br>💼 '+(m.job?m.job+' ／ ':'')+( m.indCat||'')+(m.indSub?' · '+m.indSub:''):''}
+      ${m.tel?'<br>📞 '+m.tel:''}${m.email?' ✉️ '+m.email:''}</div>
+    </div>`).join('');
+}
+function pch(s){return({'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10,'十一':11,'十二':12,'十三':13}[s]||parseInt(s)||0)}
+
+/* ============================================================
+   ADD MEMBER — tree rebuilds after submit
+============================================================ */
+function submitM(){
+  const name=gv('fn').trim(),gen=parseInt(gv('fg2'));
+  if(!name||!gen){alert('請填寫姓名及代數（必填）');return;}
+  // 收集多位配偶
+  const spouseRows=document.querySelectorAll('#spouse-rows .spouse-row');
+  const spouses=[];
+  spouseRows.forEach(function(row){
+    const spName=(row.querySelector('.sp-name')||{}).value||'';
+    if(!spName.trim())return;
+    spouses.push({
+      name:spName.trim(),
+      rel:(row.querySelector('.sp-rel')||{}).value||'元配',
+      by:((row.querySelector('.sp-by')||{}).value||'').trim(),
+      bm:((row.querySelector('.sp-bm')||{}).value||'').trim(),
+      dy:((row.querySelector('.sp-dy')||{}).value||'').trim(),
+      dm:((row.querySelector('.sp-dm')||{}).value||'').trim()
+    });
+  });
+  const spFirst=spouses.length>0?spouses[0].name:'';
+  const newM={
+    id:nid++,n:name,g:gen,sx:gv('fs'),r:gv('fr'),
+    fa:gv('ffa'),mo:gv('fmo-bio')||gv('fmo'),
+    sp:spFirst,spouses:spouses,
+    lo:gv('flo'),alive:gv('falive')||'在世',tel:gv('ftel'),email:gv('femail'),
+    indCat:gv('find-cat'),indSub:gv('find-sub'),job:gv('fjob'),
+    by:gv('fby'),bm:gv('fbm'),dy:gv('fdy'),dm:gv('fdm'),
+    nt:gv('fno'),su:gv('fsu')
+  };
+  db.push(newM);
+  buildTree();
+  // 同步到Firebase
+  setSyncStatus('loading','儲存中…');
+  fbSave(newM);
+  // 浮動成功通知
+  showToast('✦ 「'+name+'」已成功加入族人名冊！');
+  clrForm();
+}
+
+function addSpouseRow(){
+  const container=document.getElementById('spouse-rows');
+  const div=document.createElement('div');
+  div.className='spouse-row';
+  div.style.cssText='background:rgba(184,134,11,0.05);border-radius:10px;border:1px solid rgba(184,134,11,0.18);padding:12px;margin-bottom:10px;position:relative';
+  const selOpts=`<option value="元配">元配（正室）</option><option value="側室">側室（副室）</option><option value="繼室">繼室（續弦）</option><option value="前妻">前妻（離異）</option><option value="現任妻">現任妻</option><option value="前夫">前夫（離異）</option><option value="現任夫">現任夫</option>`;
+  div.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">配偶姓名</label><input type="text" class="sp-name" placeholder="姓名" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">稱謂</label><select class="sp-rel" style="min-height:44px;font-size:14px;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;-webkit-appearance:none;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 8px center;font-family:var(--serif);color:var(--ink)">${selOpts}</select></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（出生年份）</label><input type="text" class="sp-by" placeholder="民國77年 / 1988" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（月日時辰）</label><input type="text" class="sp-bm" placeholder="三月廿六日戌時" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（去世年份）</label><input type="text" class="sp-dy" placeholder="在世者留空" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（月日時辰）</label><input type="text" class="sp-dm" placeholder="十一月二十日甲時" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+    </div>
+    <button type="button" onclick="this.parentNode.remove()" style="position:absolute;top:8px;right:8px;background:rgba(139,26,26,0.1);border:none;border-radius:50%;width:24px;height:24px;font-size:14px;color:var(--red);cursor:pointer;padding:0;line-height:1;touch-action:manipulation">✕</button>
+  `;
+  container.appendChild(div);
+}
+function gv(id){return(document.getElementById(id)||{}).value||''}
+function clrForm(){
+  ['fn','ffa','ffa-input','fmo','fmo-input','fmo-bio','flo','fby','fbm','fdy','fdm','fno','fsu','ftel','femail'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  const falive=document.getElementById('falive');if(falive)falive.value='在世';
+  const fic=document.getElementById('find-cat');if(fic)fic.value='';
+  const fis=document.getElementById('find-sub');if(fis){fis.innerHTML='<option value="">請先選擇大類</option>';}
+  const fj=document.getElementById('fjob');if(fj)fj.value='';
+  ['fg2','fs','fr'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  ['ffa-sel','fmo-sel'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+  ['fb-result','fd-result'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+  // 清除配偶欄位，只留第一行並清空
+  const spRows=document.querySelectorAll('#spouse-rows .spouse-row');
+  spRows.forEach((row,i)=>{
+    if(i===0){['sp-name','sp-by','sp-bm','sp-dy','sp-dm'].forEach(function(c){const el=row.querySelector('.'+c);if(el)el.value='';});row.querySelector('.sp-rel').value='元配';}
+    else row.remove();
+  });
+  const bd=document.getElementById('fbd');if(bd)bd.value='';
+  const bt=document.getElementById('fbt');if(bt)bt.value='';
+  const dd=document.getElementById('fdd');if(dd)dd.value='';
+  const dt=document.getElementById('fdt');if(dt)dt.value='';
+}
+
+/* ============================================================
+   MEMBERS
+============================================================ */
+function renderM(){
+  const gf=document.getElementById('fgn').value,sf=document.getElementById('fsx').value;
+  let list=db.filter(m=>(!gf||String(m.g)===gf)&&(!sf||m.sx===sf));
+  document.getElementById('cnt').textContent='共 '+list.length+' 位';
+  const el=document.getElementById('ml');
+  if(!list.length){el.innerHTML='<div class="empty">無符合條件之族人</div>';return;}
+  el.innerHTML=list.map(m=>`
+    <div class="mc" onclick="oM(${m.id})">
+      <div class="mc-top"><div class="mc-n">${m.n}</div><div class="mc-g">第${m.g}代</div></div>
+      <div class="mc-r" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span>${m.r||''} ${m.sx||''}</span>
+        <span style="font-size:11px;font-family:var(--sans);color:${(m.alive||( m.dy?'已故':'在世'))==='已故'?'#999':(m.alive||( m.dy?'已故':'在世'))==='在世'?'var(--jade)':'#b8860b'}">${(m.alive||(m.dy?'已故':'在世'))==='已故'?'🕯 已故':(m.alive||(m.dy?'已故':'在世'))==='在世'?'✅ 在世':'❓ 不詳'}</span>
+      </div>
+      <div class="mc-d">
+        ${m.by?'生：'+m.by+(m.bm?' '+m.bm:''):''}
+        ${m.dy?'<br>卒：'+m.dy+(m.dm?' '+m.dm:''):''}
+        ${!m.by&&!m.dy?'（暫無生卒記載）':''}
+        ${m.lo?'<br>現居：'+m.lo:''}
+      </div>
+      ${(m.indCat||m.job)?'<div style="font-size:12px;color:var(--ink2);font-family:var(--sans);margin-top:5px">💼 '+(m.job?m.job+(m.indCat?' ／ ':''): '')+(m.indCat?m.indCat+(m.indSub?' · '+m.indSub:''):'')+'</div>':''}
+      ${m.tel||m.email?'<div style="font-size:12px;color:var(--blue);font-family:var(--sans);margin-top:4px">'+(m.tel?'📞 '+m.tel:'')+(m.tel&&m.email?' ｜ ':'' )+(m.email?'✉️ '+m.email:'')+'</div>':''}
+      ${m.nt?'<div class="mc-nt">'+m.nt+'</div>':''}
+    </div>`).join('');
+}
+
+/* ============================================================
+   MODAL — 查看 + 編輯
+============================================================ */
+let currentEditId=null;
+
+function oM(id){
+  const m=db.find(d=>d.id===id);if(!m)return;
+  currentEditId=id;
+  document.getElementById('modal-view').style.display='block';
+  document.getElementById('modal-edit').style.display='none';
+  document.getElementById('mmn').textContent=m.n;
+  // 在世狀態顯示在副標題
+  const aliveV=m.alive||(m.dy?'已故':'在世');
+  const aliveI=aliveV==='已故'?'🕯':aliveV==='在世'?'✅':'❓';
+  const aliveC=aliveV==='已故'?'#999':aliveV==='在世'?'#1f6b40':'#b8860b';
+  document.getElementById('mms').innerHTML=
+    `第${m.g}代　${m.r||''}　${m.sx||''}　<span style="color:${aliveC};font-weight:600">${aliveI} ${aliveV}</span>`;
+  const rows=[
+    ['配偶',m.sp],['父親',m.fa],['母親',m.mo],['現居',m.lo],
+    ['出生年',m.by],['出生月日時',m.bm],
+    ['去世年',m.dy],['去世月日時',m.dm],
+    ['備注',m.nt],['填寫人',m.su]
+  ];
+  let bodyHtml=rows.filter(r=>r[1]).map(r=>
+    `<div class="mrow"><div class="ml">${r[0]}</div><div class="mv">${r[1]}</div></div>`
+  ).join('');
+  // 電話和Email
+  if(m.job||m.indCat){const jobS=(m.job||'')+(m.job&&m.indCat?' ／ ':'')+( m.indCat||'')+(m.indSub?' · '+m.indSub:'');bodyHtml+=`<div class="mrow"><div class="ml">💼 職業</div><div class="mv">${jobS}</div></div>`;}
+  if(m.tel) bodyHtml+=`<div class="mrow"><div class="ml">📞 電話</div><div class="mv"><a href="tel:${m.tel}" style="color:#1a4a8b;text-decoration:none">${m.tel}</a></div></div>`;
+  if(m.email) bodyHtml+=`<div class="mrow"><div class="ml">✉️ Email</div><div class="mv"><a href="mailto:${m.email}" style="color:#1a4a8b;text-decoration:none;word-break:break-all">${m.email}</a></div></div>`;
+  document.getElementById('mmb').innerHTML=bodyHtml||
+    '<div style="color:#7a5c30;font-size:13px;padding:8px 0">（暫無記載，點下方「編輯」按鈕補充）</div>';
+  document.getElementById('mov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openEdit(){
+  const m=db.find(d=>d.id===currentEditId);if(!m)return;
+  document.getElementById('modal-view').style.display='none';
+  document.getElementById('modal-edit').style.display='block';
+  document.getElementById('edit-title').textContent='編輯：'+m.n;
+  document.getElementById('edit-ok').style.display='none';
+  // 填入現有資料
+  const fields={n:'e-n',lo:'e-lo',fa:'e-fa',mo:'e-mo',by:'e-by',bm:'e-bm',dy:'e-dy',dm:'e-dm',nt:'e-nt',su:'e-su',tel:'e-tel',email:'e-email'};
+  Object.entries(fields).forEach(([k,eid])=>{
+    const el=document.getElementById(eid);if(el)el.value=m[k]||'';
+  });
+  document.getElementById('e-g').value=String(m.g);
+  document.getElementById('e-sx').value=m.sx||'';
+  document.getElementById('e-r').value=m.r||'';
+  const eAlive=document.getElementById('e-alive');
+  if(eAlive)eAlive.value=m.alive||'在世';
+  const eIC=document.getElementById('e-ind-cat');
+  if(eIC){eIC.value=m.indCat||'';updateEditIndustrySub();}
+  setTimeout(function(){
+    const eis=document.getElementById('e-ind-sub');
+    if(eis&&m.indSub)eis.value=m.indSub;
+    const ej=document.getElementById('e-job');
+    if(ej)ej.value=m.job||'';
+  },50);
+
+  // 載入多位配偶
+  const container=document.getElementById('edit-spouse-rows');
+  container.innerHTML='';
+  const existingSpouses=(m.spouses&&m.spouses.length>0)?m.spouses:(m.sp?[{name:m.sp,rel:'元配'}]:[{name:'',rel:'元配'}]);
+  existingSpouses.forEach(function(sp,i){addEditSpouseRow(sp.name,sp.rel,i===0&&existingSpouses.length<=1,sp.by,sp.bm,sp.dy,sp.dm);});
+  if(existingSpouses.length===0) addEditSpouseRow('','元配',true);
+}
+
+function addEditSpouseRow(name,rel,isOnly,by,bm,dy,dm){
+  name=name||'';rel=rel||'元配';by=by||'';bm=bm||'';dy=dy||'';dm=dm||'';
+  const container=document.getElementById('edit-spouse-rows');
+  const S='<option value="元配">元配（正室）</option><option value="側室">側室（副室）</option><option value="繼室">繼室（續弦）</option><option value="前妻">前妻（離異）</option><option value="現任妻">現任妻</option><option value="前夫">前夫（離異）</option><option value="現任夫">現任夫</option>';
+  const I='min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.9);font-family:var(--serif);color:var(--ink);width:100%';
+  const div=document.createElement('div');
+  div.className='edit-sp-row';
+  div.style.cssText='background:rgba(255,255,255,0.6);border-radius:10px;border:1px solid rgba(184,134,11,0.22);padding:12px;margin-bottom:10px;position:relative';
+  div.innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">配偶姓名</label>'+
+        '<input type="text" class="esp-name" value="'+name+'" placeholder="配偶全名" style="'+I+'"></div>'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">稱謂</label>'+
+        '<select class="esp-rel" style="min-height:44px;font-size:14px;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.9) url(\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E\') no-repeat right 8px center;-webkit-appearance:none;font-family:var(--serif);color:var(--ink);width:100%">'+S+'</select></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（出生年份）</label>'+
+        '<input type="text" class="esp-by" value="'+by+'" placeholder="民國77年 / 1988" style="'+I+'"></div>'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（月日時辰）</label>'+
+        '<input type="text" class="esp-bm" value="'+bm+'" placeholder="三月廿六日戌時" style="'+I+'"></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（去世年份，在世留空）</label>'+
+        '<input type="text" class="esp-dy" value="'+dy+'" placeholder="在世者留空" style="'+I+'"></div>'+
+      '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（月日時辰）</label>'+
+        '<input type="text" class="esp-dm" value="'+dm+'" placeholder="十一月二十日甲時" style="'+I+'"></div>'+
+    '</div>'+
+    (!isOnly?'<button type="button" onclick="this.parentNode.remove()" style="position:absolute;top:8px;right:8px;background:rgba(139,26,26,0.12);border:none;border-radius:50%;width:24px;height:24px;font-size:14px;color:var(--red);cursor:pointer;padding:0;line-height:1;touch-action:manipulation">✕</button>':'');
+  container.appendChild(div);
+  div.querySelector('.esp-rel').value=rel;
+}
+function saveEdit(){
+  const m=db.find(d=>d.id===currentEditId);if(!m)return;
+  const fields={n:'e-n',lo:'e-lo',fa:'e-fa',mo:'e-mo',by:'e-by',bm:'e-bm',dy:'e-dy',dm:'e-dm',nt:'e-nt',su:'e-su'};
+  Object.entries(fields).forEach(function(entry){
+    const k=entry[0],eid=entry[1];
+    const el=document.getElementById(eid);if(el)m[k]=el.value.trim();
+  });
+  m.g=parseInt(document.getElementById('e-g').value)||m.g;
+  m.sx=document.getElementById('e-sx').value;
+  m.r=document.getElementById('e-r').value;
+  const ea=document.getElementById('e-alive');if(ea)m.alive=ea.value;
+  const eic=document.getElementById('e-ind-cat');if(eic)m.indCat=eic.value;
+  const eis=document.getElementById('e-ind-sub');if(eis)m.indSub=eis.value;
+  const ej=document.getElementById('e-job');if(ej)m.job=ej.value.trim();
+
+  // 儲存多位配偶
+  const spRows=document.querySelectorAll('#edit-spouse-rows .edit-sp-row');
+  const newSpouses=[];
+  spRows.forEach(function(row){
+    const n=row.querySelector('.esp-name').value.trim();
+    if(!n)return;
+    const r=row.querySelector('.esp-rel').value;
+    const sby=((row.querySelector('.esp-by')||{}).value||'').trim();
+    const sbm=((row.querySelector('.esp-bm')||{}).value||'').trim();
+    const sdy=((row.querySelector('.esp-dy')||{}).value||'').trim();
+    const sdm=((row.querySelector('.esp-dm')||{}).value||'').trim();
+    newSpouses.push({name:n,rel:r,by:sby,bm:sbm,dy:sdy,dm:sdm});
+  });
+  m.spouses=newSpouses;
+  m.sp=newSpouses.length>0?newSpouses[0].name:'';
+
+  buildTree();
+  renderM();
+  // 同步到Firebase
+  setSyncStatus('loading','儲存中…');
+  fbSave(m);
+
+  // 顯示成功提示（浮動通知）
+  showToast('✦ 「'+m.n+'」資料已儲存！族譜已同步更新。');
+
+  // 切回查看模式
+  setTimeout(function(){
+    oM(currentEditId);
+  },400);
+}
+
+function cancelEdit(){
+  document.getElementById('modal-view').style.display='block';
+  document.getElementById('modal-edit').style.display='none';
+}
+
+function deleteMember(){
+  const m=db.find(d=>d.id===currentEditId);if(!m)return;
+  if(!confirm('確定要刪除「'+m.n+'」的資料嗎？\n此操作無法復原。')){return;}
+  db=db.filter(d=>d.id!==currentEditId);
+  fetch('https://zeng-family-3a672-default-rtdb.firebaseio.com/members/'+currentEditId+'.json',{method:'DELETE'})
+    .catch(function(e){console.warn('Firebase刪除失敗',e);});
+  buildTree();
+  renderM();
+  cM();
+  showToast('🗑 「'+m.n+'」已從族譜刪除','#8b1a1a');
+  setSyncStatus('ok','已刪除');
+}
+
+function showToast(msg,color){
+  const el=document.getElementById('float-toast');
+  if(!el)return;
+  el.textContent=msg;
+  el.style.background=color||'#1b5e20';
+  el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t=setTimeout(function(){el.style.opacity='0';},3000);
+}
+
+function cM(){
+  document.getElementById('mov').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ============================================================
+   密碼保護
+   密碼：zeng2025（可自行修改此行的字串）
+============================================================ */
+const FAMILY_PASSWORD_DEFAULT='zeng2025';
+const ADMIN_PASSWORD='zengadmin888';
+let currentFamilyPassword=FAMILY_PASSWORD_DEFAULT;
+
+// 啟動時從Firebase讀取最新族人密碼
+async function loadPasswordFromFB(){
+  try{
+    const res=await fetch('https://zeng-family-3a672-default-rtdb.firebaseio.com/config/familyPassword.json');
+    if(res.ok){
+      const pw=await res.json();
+      if(pw&&typeof pw==='string') currentFamilyPassword=pw;
+    }
+  }catch(e){}
+}
+
+function checkPw(){
+  const pw=document.getElementById('lock-pw').value.trim();
+  const err=document.getElementById('lock-err');
+  if(pw===currentFamilyPassword||pw===ADMIN_PASSWORD){
+    document.getElementById('lock-screen').style.display='none';
+    sessionStorage.setItem('zupu_auth','1');
+    err.textContent='';
+    if(pw===ADMIN_PASSWORD) setTimeout(showAdminPanel,500);
+  } else {
+    err.textContent='❌ 密碼錯誤，請重新輸入';
+    document.getElementById('lock-pw').value='';
+    document.getElementById('lock-pw').focus();
+  }
+}
+
+async function showAdminPanel(){
+  const newPw=prompt('【管理員模式】\n目前族人密碼：'+currentFamilyPassword+'\n\n請輸入新的族人密碼（留空則不更改）：');
+  if(newPw&&newPw.trim()){
+    // 儲存到Firebase
+    try{
+      await fetch('https://zeng-family-3a672-default-rtdb.firebaseio.com/config/familyPassword.json',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(newPw.trim())
+      });
+      currentFamilyPassword=newPw.trim();
+      alert('✅ 密碼已永久更新為：'+newPw.trim()+'\n\n請通知族人使用新密碼登入！');
+    }catch(e){
+      alert('⚠️ 密碼更新失敗，請檢查網路連線後再試。');
+    }
+  }
+}
+
+(function(){
+  // 先嘗試從Firebase載入最新密碼，再顯示密碼畫面
+  loadPasswordFromFB();
+  if(sessionStorage.getItem('zupu_auth')==='1'){
+    const ls=document.getElementById('lock-screen');
+    if(ls)ls.style.display='none';
+  }
+})();
+
+function downloadReport(){
+  const genNames=['','第一代','第二代','第三代','第四代','第五代','第六代','第七代','第八代','第九代','第十代','第十一代','第十二代','第十三代','第十四代','第十五代','第十六代','第十七代','第十八代','第十九代','第二十代'];
+  const maxGen=Math.max(...db.map(function(m){return m.g;}));
+  const today=new Date().toLocaleDateString('zh-TW');
+
+  let rows='';
+  for(let g=1;g<=maxGen;g++){
+    const members=db.filter(function(m){return m.g===g;});
+    if(members.length===0)continue;
+    rows+='<div class="gs"><div class="gt">'+(genNames[g]||'第'+g+'代')+'</div><div class="gw">';
+    members.forEach(function(m){
+      const sp=(m.spouses&&m.spouses.length>0)?m.spouses.map(function(s){return s.name+'（'+s.rel+'）';}).join('、'):(m.sp||'');
+      let info='';
+      if(sp) info+='<b>配偶</b>'+sp+'<br>';
+      if(m.fa||m.mo) info+='<b>父母</b>'+(m.fa||'—')+'／'+(m.mo||'—')+'<br>';
+      if(m.by||m.bm) info+='<b>生</b>'+(m.by||'')+' '+(m.bm||'')+'<br>';
+      if(m.dy||m.dm) info+='<b>卒</b>'+(m.dy||'')+' '+(m.dm||'')+'<br>';
+      if(m.lo) info+='<b>現居</b>'+m.lo+'<br>';
+      if(m.nt) info+='<b>備注</b>'+m.nt+'<br>';
+      rows+='<div class="mc"><div class="mn">'+m.n+'</div><div class="mr">'+(m.r||'')+' '+(m.sx||'')+'</div>'+(info?'<div class="mi">'+info+'</div>':[])+'</div>';
+    });
+    rows+='</div></div>';
+  }
+
+  const doc='<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>龍山曾家族譜</title>'
+    +'<style>body{font-family:serif;background:#fdf6e3;color:#1a0f00;margin:0;padding:24px}'
+    +'h1{text-align:center;font-size:26px;color:#8b1a1a;letter-spacing:5px;margin-bottom:4px}'
+    +'.sub{text-align:center;font-size:12px;color:#7a5c30;margin-bottom:28px}'
+    +'.gs{margin-bottom:24px;page-break-inside:avoid}'
+    +'.gt{font-size:17px;font-weight:700;color:#8b1a1a;border-bottom:2px solid #b8860b;padding-bottom:5px;margin-bottom:10px;letter-spacing:3px}'
+    +'.gw{display:flex;flex-wrap:wrap;gap:10px}'
+    +'.mc{background:#fff9ee;border:1px solid rgba(139,105,20,0.2);border-radius:8px;padding:12px 14px;min-width:220px;max-width:300px}'
+    +'.mn{font-size:16px;font-weight:700;color:#8b1a1a}.mr{font-size:11px;color:#7a5c30;margin-top:2px}'
+    +'.mi{font-size:11px;color:#3d2b10;margin-top:6px;line-height:1.9}.mi b{color:#7a5c30;margin-right:3px}'
+    +'@media print{body{background:white}.gs{page-break-inside:avoid}}'
+    +'</style></head><body>'
+    +'<h1>龍山・曾家歷代祖公媽名冊</h1>'
+    +'<div class="sub">十二代四房裔孫　曾維杰　整理存冊　｜　列印日期：'+today+'</div>'
+    +rows+'</body></html>';
+
+  const blob=new Blob([doc],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='zengfamily-'+today.replace(/\//g,'')+'.html';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+
+/* ===== 行業分類資料（依台灣主計總處行業標準分類第11次修訂）===== */
+const INDUSTRY_DATA={
+  '農林漁牧業':['農作物栽培','畜牧業','林業','漁業','農業支援服務'],
+  '礦業及土石採取業':['煤礦採取','石油天然氣採取','金屬礦採取','砂石土採取','其他礦業'],
+  '製造業':['食品製造','飲料製造','菸草製造','紡織業','成衣及服飾品製造','皮革毛皮製品','木竹製品製造','紙漿紙製品','印刷業','石油煤製品製造','化學材料製造','化學製品製造','橡膠製品製造','塑膠製品製造','非金屬礦物製品','基本金屬製造','金屬製品製造','電子零組件製造','電腦電子光學產品製造','電力設備製造','機械設備製造','汽車及其零件製造','其他運輸工具製造','家具製造','其他製造業','產業用機械設備維修'],
+  '電力及燃氣供應業':['電力供應','天然氣供應','蒸汽供應'],
+  '用水供應及污染整治業':['用水供應','廢水處理','廢棄物清除及處理','污染整治'],
+  '營建工程業':['建築工程','土木工程','建築裝修工程','其他專業工程'],
+  '批發及零售業':['商品批發','汽機車銷售維修','綜合商品零售','食品飲料零售','藥妝美容零售','服飾配件零售','家用品零售','3C電子零售','網路購物','其他零售'],
+  '運輸及倉儲業':['陸上運輸','水上運輸','航空運輸','倉儲業','郵政快遞'],
+  '住宿及餐飲業':['旅館住宿','民宿','餐廳','飲料店','外燴餐盒'],
+  '出版影音及資通訊業':['出版業','影片音樂製作','廣播電視','電信業','電腦程式設計','資訊服務業','網路媒體'],
+  '金融及保險業':['銀行業','信用合作社','證券期貨','保險業','金融控股','金融輔助服務'],
+  '不動產業':['不動產開發','不動產買賣','不動產租賃','不動產經紀管理'],
+  '專業科學及技術服務業':['法律服務','會計審計','建築設計','工程技術服務','研究發展','廣告及市場研究','管理顧問','獸醫服務'],
+  '支援服務業':['機械設備租賃','人力仲介招募','旅行社','保全服務','清潔服務','辦公室行政'],
+  '公共行政及國防':['中央政府機關','地方政府機關','社會安全','國防'],
+  '教育業':['幼兒園','國小','國中','高中職','大專院校','補習教育','才藝技藝學習','特殊教育'],
+  '醫療保健及社會工作服務業':['醫院','診所（西醫）','牙醫診所','中醫診所','護理之家','社會工作','長照居家服務','心理諮商'],
+  '藝術娛樂及休閒服務業':['創作表演藝術','圖書館博物館','運動場館','電競遊戲','健身休閒','主題樂園'],
+  '其他服務業':['宗教團體','職業公會','家事服務','美容美髮','洗衣服務','殯葬禮儀','汽機車保養維修']
+};
+
+function updateIndustrySub(){
+  const cat=document.getElementById('find-cat').value;
+  const sub=document.getElementById('find-sub');
+  sub.innerHTML='<option value="">請選擇細項</option>';
+  if(cat&&INDUSTRY_DATA[cat]){
+    INDUSTRY_DATA[cat].forEach(function(s){
+      const o=document.createElement('option');o.value=s;o.textContent=s;sub.appendChild(o);
+    });
+  }
+}
+
+function updateEditIndustrySub(){
+  const cat=document.getElementById('e-ind-cat').value;
+  const sub=document.getElementById('e-ind-sub');
+  if(!sub)return;
+  sub.innerHTML='<option value="">請選擇細項</option>';
+  if(cat&&INDUSTRY_DATA[cat]){
+    INDUSTRY_DATA[cat].forEach(function(s){
+      const o=document.createElement('option');o.value=s;o.textContent=s;sub.appendChild(o);
+    });
+  }
+}
+
+/* ===== FIREBASE ===== */
+const FB_URL='https://zeng-family-3a672-default-rtdb.firebaseio.com';
+let fbLoaded=false;
+
+function setSyncStatus(status,msg){
+  const el=document.getElementById('sync-status');
+  if(!el)return;
+  const icons={ok:'☁️ ',loading:'🔄 ',error:'⚠️ '};
+  el.textContent=(icons[status]||'')+msg;
+  el.style.color=status==='error'?'#ffb3b3':'var(--gold3)';
+}
+
+async function fbSave(member){
+  try{
+    const res=await fetch(FB_URL+'/members/'+member.id+'.json',{
+      method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(member)
+    });
+    if(!res.ok)throw new Error();
+    setSyncStatus('ok','已儲存 ✓');
+    setTimeout(function(){setSyncStatus('ok','已同步');},2000);
+  }catch(e){setSyncStatus('error','儲存失敗，請重試');console.warn(e);}
+}
+
+async function fbLoad(){
+  setSyncStatus('loading','連線中…');
+  try{
+    const res=await fetch(FB_URL+'/members.json');
+    if(!res.ok)throw new Error();
+    const data=await res.json();
+    if(data&&typeof data==='object'){
+      const fbMembers=Object.values(data).filter(function(m){return m&&m.id&&m.n;});
+      // 至少要有10筆有效資料才信任Firebase的資料
+      if(fbMembers.length>=10){
+        db=fbMembers;
+        nid=Math.max.apply(null,db.map(function(m){return m.id||0;}))+1;
+        if(nid<200)nid=200;
+        fbLoaded=true;
+        buildTree();renderM();
+        setSyncStatus('ok','已同步（'+db.length+'位族人）');
+        fbListen();return;
+      }
+    }
+    // Firebase資料不足或空的，上傳預設41位族人
+    setSyncStatus('loading','同步基礎資料中…');
+    const batch={};
+    db.forEach(function(m){batch[m.id]=m;});
+    const putRes=await fetch(FB_URL+'/members.json',{
+      method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(batch)
+    });
+    if(!putRes.ok)throw new Error('上傳失敗');
+    fbLoaded=true;
+    buildTree();renderM();
+    setSyncStatus('ok','同步完成（'+db.length+'位族人）');
+    fbListen();
+  }catch(e){
+    setSyncStatus('error','離線模式');
+    console.warn('Firebase失敗',e);
+    buildTree();renderM();
+  }
+}
+
+function fbListen(){
+  setInterval(async function(){
+    try{
+      const res=await fetch(FB_URL+'/members.json');
+      if(!res.ok)return;
+      const data=await res.json();
+      if(!data)return;
+      const fbM=Object.values(data).filter(function(m){return m&&m.id&&m.n;});
+      if(fbM.length===0)return;
+      const fbMax=Math.max.apply(null,fbM.map(function(m){return m.id||0;}));
+      const lcMax=Math.max.apply(null,db.map(function(m){return m.id||0;}));
+      if(fbM.length!==db.length||fbMax!==lcMax){
+        db=fbM;nid=Math.max(fbMax+1,200);
+        buildTree();renderM();setSyncStatus('ok','已同步最新 ✓');
+      }
+    }catch(e){}
+  },20000);
+}
+
+/* INIT */
+buildTree();
+renderM();
+setTimeout(function(){
+  try{fbLoad();}catch(e){console.warn('Firebase初始化失敗',e);}
+},100);
+</script>
+</body>
+</html>
