@@ -1097,29 +1097,35 @@ function buildTree(){
 
   // ---- 右側：第9代以後，累積y值避免重疊 ----
   const maxGen=db.length>0?Math.max.apply(null,db.map(function(m){return m.g;})):9;
-  let curY=26; // 目前累積的Y位置
+  let curY=26;
   for(let g=9;g<=maxGen;g++){
     const ms=db.filter(function(m){return m.g===g;});
     if(ms.length===0)continue;
     const ry=curY;
+    // 每代最多4欄，超過自動換行
     const cols=Math.min(ms.length,4);
     const rows=Math.ceil(ms.length/cols);
+    // 每個格子高度33px + 間距10px
+    const rowH=NH+10;
+    const totalH=rows*rowH;
+
     ms.forEach(function(m,i){
       const c=i%cols,r=Math.floor(i/cols);
-      const x=C2+c*(NW+HG),y=ry+r*(NH+10);
+      const x=C2+c*(NW+HG),y=ry+r*rowH;
       pos[m.id]={x,y,cx:x+NW/2,cy:y+NH/2};
       mkNode(m,x,y);
     });
     mkt('tl','第'+g+'代',C2-5,ry+NH/2+5,10,GC[g]||'#555','end');
-    // 連線到下一代
+
+    // 連線到下一代（從這代最後一行底部往下）
     const nextMs=db.filter(function(m){return m.g===g+1;});
     if(nextMs.length>0&&ms[0]){
       const p=pos[ms[0].id];
-      const gap=80;
-      if(p) mkl('tl',p.cx,ry+NH+(rows-1)*(NH+10)+NH,p.cx,ry+NH+(rows-1)*(NH+10)+NH+gap,GC[g]||'#aaa',0.6,'3 3');
+      const bottomY=ry+totalH-rowH+NH; // 最後一行底部
+      if(p) mkl('tl',p.cx,bottomY,p.cx,bottomY+60,GC[g]||'#aaa',0.6,'3 3');
     }
-    // 累積Y：這代所有行的高度 + 80px間隔
-    curY+=rows*(NH+10)+80;
+    // 累積Y：這代總高 + 80px間隔（確保不重疊）
+    curY+=totalH+80;
   }
 
   // 橋接箭頭 gen8 → gen9
