@@ -329,12 +329,12 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-            <div class="fi"><label>生於（出生年份）</label><input type="text" class="sp-by" placeholder="民國77年 / 1988" style="min-height:44px;font-size:15px"></div>
-            <div class="fi"><label>生於（月日時辰）</label><input type="text" class="sp-bm" placeholder="三月廿六日戌時" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（西元年月日）</label><input type="text" class="sp-by" placeholder="例：1988/04/12" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">出生時辰（不知選吉時）</label><select class="sp-sc-b" style="min-height:44px;font-size:14px;padding:8px 28px 8px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 8px center;-webkit-appearance:none;font-family:var(--serif);color:var(--ink);width:100%"><option value="吉時">吉時（不詳）</option><option value="子時">子時（23-01時）</option><option value="丑時">丑時（01-03時）</option><option value="寅時">寅時（03-05時）</option><option value="卯時">卯時（05-07時）</option><option value="辰時">辰時（07-09時）</option><option value="巳時">巳時（09-11時）</option><option value="午時">午時（11-13時）</option><option value="未時">未時（13-15時）</option><option value="申時">申時（15-17時）</option><option value="酉時">酉時（17-19時）</option><option value="戌時">戌時（19-21時）</option><option value="亥時">亥時（21-23時）</option></select></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div class="fi"><label>卒於（去世年份，在世留空）</label><input type="text" class="sp-dy" placeholder="民國87年 / 1998" style="min-height:44px;font-size:15px"></div>
-            <div class="fi"><label>卒於（月日時辰）</label><input type="text" class="sp-dm" placeholder="十一月二十日甲時" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（西元年月日，在世留空）</label><input type="text" class="sp-dy" placeholder="例：1998/11/20" style="min-height:44px;font-size:15px"></div>
+            <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">去世時辰（不知可不填）</label><select class="sp-sc-d" style="min-height:44px;font-size:14px;padding:8px 28px 8px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 8px center;-webkit-appearance:none;font-family:var(--serif);color:var(--ink);width:100%"><option value="">── 不填寫 ──</option><option value="子時">子時（23-01時）</option><option value="丑時">丑時（01-03時）</option><option value="寅時">寅時（03-05時）</option><option value="卯時">卯時（05-07時）</option><option value="辰時">辰時（07-09時）</option><option value="巳時">巳時（09-11時）</option><option value="午時">午時（11-13時）</option><option value="未時">未時（13-15時）</option><option value="申時">申時（15-17時）</option><option value="酉時">酉時（17-19時）</option><option value="戌時">戌時（19-21時）</option><option value="亥時">亥時（21-23時）</option><option value="吉時">吉時（不詳）</option></select></div>
           </div>
         </div>
       </div>
@@ -434,46 +434,69 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
   <!-- 出生資料 -->
   <div class="fc">
     <div class="fc-h">出生資料</div>
-    <div class="fg one" style="margin-bottom:8px">
-      <div class="fi">
-        <label>西元出生日期 + 時間 → 自動換算</label>
-        <div class="date-row">
-          <input type="text" id="fbd" placeholder="例：1988/04/12" oninput="convertDateText('b')" style="flex:1;min-width:0;padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
-          <div class="fi-time fi">
-            <input type="text" id="fbt" placeholder="20:41" oninput="convertDateText('b')" style="width:100px;padding:13px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
-          </div>
-        </div>
-        <div class="convert-result" id="fb-result"></div>
+    <div class="fg" style="margin-bottom:8px;align-items:flex-end">
+      <div class="fi" style="flex:2">
+        <label>西元出生年月日 <span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">→ 自動換算農曆</span></label>
+        <input type="text" id="fbd" placeholder="例：1988/04/12" oninput="convertDateText('b')" style="padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink);width:100%">
+      </div>
+      <div class="fi" style="flex:1">
+        <label>出生時辰 <span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">（不知道選吉時）</span></label>
+        <select id="fbt" onchange="convertDateText('b')" style="min-height:48px;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 10px center;-webkit-appearance:none;font-family:var(--serif);font-size:15px;color:var(--ink);width:100%">
+          <option value="吉時">吉時（不詳）</option>
+          <option value="子時">子時（23-01時）</option>
+          <option value="丑時">丑時（01-03時）</option>
+          <option value="寅時">寅時（03-05時）</option>
+          <option value="卯時">卯時（05-07時）</option>
+          <option value="辰時">辰時（07-09時）</option>
+          <option value="巳時">巳時（09-11時）</option>
+          <option value="午時">午時（11-13時）</option>
+          <option value="未時">未時（13-15時）</option>
+          <option value="申時">申時（15-17時）</option>
+          <option value="酉時">酉時（17-19時）</option>
+          <option value="戌時">戌時（19-21時）</option>
+          <option value="亥時">亥時（21-23時）</option>
+        </select>
       </div>
     </div>
+    <div class="convert-result" id="fb-result" style="margin-bottom:8px"></div>
     <div class="fg">
-      <div class="fi"><label>出生年份（農曆/民國，可手動修改）</label><input type="text" id="fby" placeholder="民國77年 / 乾隆甲牛年"></div>
-      <div class="fi"><label>出生月日時辰（可手動修改）
-        <button type="button" onclick="showShichenPicker('fbm')" style="margin-left:8px;font-size:11px;padding:2px 8px;background:var(--parch2);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:var(--sans);color:var(--ink2);touch-action:manipulation">選時辰</button>
-      </label><input type="text" id="fbm" placeholder="三月廿六日戌時（或吉時）"></div>
+      <div class="fi"><label>生於年份（自動換算，可手動修改）</label><input type="text" id="fby" placeholder="民國77年（戊辰年）"></div>
+      <div class="fi"><label>生於月日時辰（自動換算，可手動修改）</label><input type="text" id="fbm" placeholder="農曆二月廿六 戌時"></div>
     </div>
   </div>
 
   <!-- 去世資料 -->
   <div class="fc">
-    <div class="fc-h">去世資料（在世者留空）</div>
-    <div class="fg one" style="margin-bottom:8px">
-      <div class="fi">
-        <label>西元去世日期 + 時間 → 自動換算（在世者請勿填寫）</label>
-        <div class="date-row">
-          <input type="text" id="fdd" placeholder="例：1998/11/20" oninput="convertDateText('d')" style="flex:1;min-width:0;padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
-          <div class="fi-time fi">
-            <input type="text" id="fdt" placeholder="例：14:30" oninput="convertDateText('d')" style="width:110px;padding:13px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink)">
-          </div>
-        </div>
-        <div class="convert-result" id="fd-result"></div>
+    <div class="fc-h">去世資料（在世者全部留空）</div>
+    <div class="fg" style="margin-bottom:8px;align-items:flex-end">
+      <div class="fi" style="flex:2">
+        <label>西元去世年月日 <span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">→ 自動換算（在世者請勿填寫）</span></label>
+        <input type="text" id="fdd" placeholder="例：1998/11/20" oninput="convertDateText('d')" style="padding:13px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);font-family:var(--serif);font-size:16px;color:var(--ink);width:100%">
+      </div>
+      <div class="fi" style="flex:1">
+        <label>去世時辰 <span style="font-size:11px;color:var(--ink3);font-family:var(--sans)">（不知道可不選）</span></label>
+        <select id="fdt" onchange="convertDateText('d')" style="min-height:48px;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 10px center;-webkit-appearance:none;font-family:var(--serif);font-size:15px;color:var(--ink);width:100%">
+          <option value="">── 不填寫 ──</option>
+          <option value="子時">子時（23-01時）</option>
+          <option value="丑時">丑時（01-03時）</option>
+          <option value="寅時">寅時（03-05時）</option>
+          <option value="卯時">卯時（05-07時）</option>
+          <option value="辰時">辰時（07-09時）</option>
+          <option value="巳時">巳時（09-11時）</option>
+          <option value="午時">午時（11-13時）</option>
+          <option value="未時">未時（13-15時）</option>
+          <option value="申時">申時（15-17時）</option>
+          <option value="酉時">酉時（17-19時）</option>
+          <option value="戌時">戌時（19-21時）</option>
+          <option value="亥時">亥時（21-23時）</option>
+          <option value="吉時">吉時（不詳）</option>
+        </select>
       </div>
     </div>
+    <div class="convert-result" id="fd-result" style="margin-bottom:8px"></div>
     <div class="fg">
-      <div class="fi"><label>去世年份（農曆/民國，可手動修改）</label><input type="text" id="fdy" placeholder="民國87年"></div>
-      <div class="fi"><label>去世月日時辰（可手動修改）
-        <button type="button" onclick="showShichenPicker('fdm')" style="margin-left:8px;font-size:11px;padding:2px 8px;background:var(--parch2);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:var(--sans);color:var(--ink2);touch-action:manipulation">選時辰</button>
-      </label><input type="text" id="fdm" placeholder="十一月二十日甲時（或吉時）"></div>
+      <div class="fi"><label>卒於年份（自動換算，可手動修改）</label><input type="text" id="fdy" placeholder="（在世者留空）"></div>
+      <div class="fi"><label>卒於月日時辰（自動換算，可手動修改）</label><input type="text" id="fdm" placeholder="（在世者留空）"></div>
     </div>
   </div>
 
@@ -905,50 +928,66 @@ function getSexagenary(year){
 
 function convertDateText(type){
   const dateVal=(document.getElementById(type==='b'?'fbd':'fdd').value||'').trim();
-  const timeVal=(document.getElementById(type==='b'?'fbt':'fdt').value||'').trim();
+  const shichenEl=document.getElementById(type==='b'?'fbt':'fdt');
+  const shichenVal=shichenEl?shichenEl.value:'';
   const resultEl=document.getElementById(type==='b'?'fb-result':'fd-result');
   const byEl=document.getElementById(type==='b'?'fby':'fdy');
   const bmEl=document.getElementById(type==='b'?'fbm':'fdm');
-  if(!dateVal){resultEl.style.display='none';return;}
+
+  // 去世：沒填日期就清空並回傳
+  if(type==='d'&&!dateVal){
+    if(resultEl)resultEl.style.display='none';
+    if(byEl)byEl.value='';
+    if(bmEl)bmEl.value='';
+    return;
+  }
+
+  if(!dateVal){
+    // 出生：沒填日期但有選時辰，只更新時辰部分
+    if(type==='b'&&shichenVal){
+      const cur=bmEl?bmEl.value:'';
+      if(bmEl) bmEl.value=cur.replace(/[子丑寅卯辰巳午未申酉戌亥吉]時/,shichenVal)||shichenVal;
+    }
+    if(resultEl)resultEl.style.display='none';
+    return;
+  }
+
   const parts=dateVal.replace(/-/g,'/').split('/');
-  if(parts.length<3){resultEl.style.display='none';return;}
+  if(parts.length<3){if(resultEl)resultEl.style.display='none';return;}
   const year=parseInt(parts[0]),month=parseInt(parts[1]),day=parseInt(parts[2]);
-  if(!year||!month||!day||year<1800||year>2100){resultEl.style.display='none';return;}
+  if(!year||!month||!day||year<1800||year>2100){if(resultEl)resultEl.style.display='none';return;}
 
   const roc=getROCYear(year);
   const sexag=getSexagenary(year);
   const lunar=solarToLunar(year,month,day);
   const lunarMonth=LUNAR_MONTHS_CH[lunar.month-1]||'';
   const lunarDay=LUNAR_DAYS_CH[lunar.day-1]||'';
-  const lunarStr='農曆'+lunarMonth+'月'+lunarDay;
+  const lunarDateStr=lunarMonth+'月'+lunarDay;
 
-  let shichen='',timeDisp='',ampm='';
-  if(timeVal){
-    const tp=timeVal.split(':');
-    const h=parseInt(tp[0])||0,mi=parseInt(tp[1])||0;
-    shichen=getShichen(h);
-    ampm=h<12?'上午':'下午';
-    timeDisp=ampm+(h%12||12)+':'+String(mi).padStart(2,'0');
+  // 時辰處理
+  // 出生：未選或選吉時 → 顯示吉時
+  // 去世：未選 → 不顯示時辰
+  let shichen='';
+  if(type==='b'){
+    shichen=shichenVal||'吉時';
+  } else {
+    shichen=shichenVal||''; // 去世空白就不填
   }
 
   const rocFull=roc+'（'+sexag+'）';
-  // 西元格式
-  const solarFull=year+'年'+month+'月'+day+'日'+(timeDisp?' '+timeDisp:'');
-  // 農曆格式（含時辰）
-  const lunarFull=lunarStr+(shichen?' '+shichen:'');
-  // 民國+農曆格式（填入欄位用）
-  const fieldBy='西元'+solarFull+' ／ '+rocFull;
-  const fieldBm=lunarFull;
+  const lunarFull='農曆'+lunarDateStr+(shichen?' '+shichen:'');
 
-  resultEl.innerHTML=
-    '<div style="margin-bottom:3px">📅 <strong>西元 '+year+'年'+month+'月'+day+'日</strong>'+(timeDisp?' <span style="color:var(--blue)">'+timeDisp+'</span>':'')+' → <span style="color:var(--red)">'+shichen+'</span></div>'
-    +'<div style="margin-bottom:3px">🏛️ <strong>'+rocFull+'</strong></div>'
-    +'<div>🌙 <strong style="color:var(--jade)">'+lunarFull+'</strong></div>';
-  resultEl.style.display='block';
+  if(resultEl){
+    resultEl.innerHTML=
+      '<div style="margin-bottom:3px">📅 <strong>西元 '+year+'年'+month+'月'+day+'日</strong>'+(shichen?' → <span style="color:var(--red)">'+shichen+'</span>':'')+'</div>'
+      +'<div style="margin-bottom:3px">🏛️ <strong>'+rocFull+'</strong></div>'
+      +'<div>🌙 <strong style="color:var(--jade)">'+lunarFull+'</strong></div>';
+    resultEl.style.display='block';
+  }
 
-  // 自動填入欄位：同時保留西元和農曆
-  byEl.value='西元'+year+'/'+String(month).padStart(2,'0')+'/'+String(day).padStart(2,'0')+' ／ '+roc+'（'+sexag+'）';
-  bmEl.value=lunarFull;
+  // 自動填入欄位
+  if(byEl) byEl.value='西元'+year+'/'+String(month).padStart(2,'0')+'/'+String(day).padStart(2,'0')+' ／ '+rocFull;
+  if(bmEl) bmEl.value=lunarFull;
 }
 
 /* ============================================================
@@ -1395,10 +1434,10 @@ function submitM(){
     spouses.push({
       name:spName.trim(),
       rel:(row.querySelector('.sp-rel')||{}).value||'元配',
-      by:((row.querySelector('.sp-by')||{}).value||'').trim(),
-      bm:((row.querySelector('.sp-bm')||{}).value||'').trim(),
-      dy:((row.querySelector('.sp-dy')||{}).value||'').trim(),
-      dm:((row.querySelector('.sp-dm')||{}).value||'').trim()
+      by:spDateToLunar(((row.querySelector('.sp-by')||{}).value||'').trim(), '', 'by'),
+      bm:spDateToLunar(((row.querySelector('.sp-by')||{}).value||'').trim(), (row.querySelector('.sp-bm')||{value:'吉時'}).value, 'b'),
+      dy:spDateToLunar(((row.querySelector('.sp-dy')||{}).value||'').trim(), '', 'by'),
+      dm:spDateToLunar(((row.querySelector('.sp-dy')||{}).value||'').trim(), (row.querySelector('.sp-dm')||{value:''}).value, 'd')
     });
   });
   const spFirst=spouses.length>0?spouses[0].name:'';
@@ -1433,12 +1472,12 @@ function addSpouseRow(){
       <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">稱謂</label><select class="sp-rel" style="min-height:44px;font-size:14px;padding:10px 28px 10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;-webkit-appearance:none;background:rgba(255,255,255,0.85) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%237a5c30%22 stroke-width=%221.5%22 fill=%22none%22/%3E%3C/svg%3E') no-repeat right 8px center;font-family:var(--serif);color:var(--ink)">${selOpts}</select></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（出生年份）</label><input type="text" class="sp-by" placeholder="民國77年 / 1988" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
-      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（月日時辰）</label><input type="text" class="sp-bm" placeholder="三月廿六日戌時" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（西元年月日）</label><input type="text" class="sp-by" placeholder="例：1988/04/12" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">出生時辰（不知選吉時）</label><select class="sp-bm" style="min-height:44px;font-size:14px;padding:8px 28px 8px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);-webkit-appearance:none;font-family:var(--serif);color:var(--ink);width:100%"><option value="吉時">吉時（不詳）</option><option value="子時">子時（23-01時）</option><option value="丑時">丑時（01-03時）</option><option value="寅時">寅時（03-05時）</option><option value="卯時">卯時（05-07時）</option><option value="辰時">辰時（07-09時）</option><option value="巳時">巳時（09-11時）</option><option value="午時">午時（11-13時）</option><option value="未時">未時（13-15時）</option><option value="申時">申時（15-17時）</option><option value="酉時">酉時（17-19時）</option><option value="戌時">戌時（19-21時）</option><option value="亥時">亥時（21-23時）</option></select></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（去世年份）</label><input type="text" class="sp-dy" placeholder="在世者留空" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
-      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（月日時辰）</label><input type="text" class="sp-dm" placeholder="十一月二十日甲時" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（西元年月日，在世留空）</label><input type="text" class="sp-dy" placeholder="例：1998/11/20" style="min-height:44px;font-size:15px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;width:100%;font-family:var(--serif);color:var(--ink);background:rgba(255,255,255,0.85)"></div>
+      <div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">去世時辰（不知可不填）</label><select class="sp-dm" style="min-height:44px;font-size:14px;padding:8px 28px 8px 10px;border:1.5px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.85);-webkit-appearance:none;font-family:var(--serif);color:var(--ink);width:100%"><option value="">── 不填寫 ──</option><option value="子時">子時（23-01時）</option><option value="丑時">丑時（01-03時）</option><option value="寅時">寅時（03-05時）</option><option value="卯時">卯時（05-07時）</option><option value="辰時">辰時（07-09時）</option><option value="巳時">巳時（09-11時）</option><option value="午時">午時（11-13時）</option><option value="未時">未時（13-15時）</option><option value="申時">申時（15-17時）</option><option value="酉時">酉時（17-19時）</option><option value="戌時">戌時（19-21時）</option><option value="亥時">亥時（21-23時）</option><option value="吉時">吉時（不詳）</option></select></div>
     </div>
     <button type="button" onclick="this.parentNode.remove()" style="position:absolute;top:8px;right:8px;background:rgba(139,26,26,0.1);border:none;border-radius:50%;width:24px;height:24px;font-size:14px;color:var(--red);cursor:pointer;padding:0;line-height:1;touch-action:manipulation">✕</button>
   `;
@@ -1457,13 +1496,22 @@ function clrForm(){
   // 清除配偶欄位，只留第一行並清空
   const spRows=document.querySelectorAll('#spouse-rows .spouse-row');
   spRows.forEach((row,i)=>{
-    if(i===0){['sp-name','sp-by','sp-bm','sp-dy','sp-dm'].forEach(function(c){const el=row.querySelector('.'+c);if(el)el.value='';});row.querySelector('.sp-rel').value='元配';}
+    if(i===0){
+      const spN=row.querySelector('.sp-name');if(spN)spN.value='';
+      const spBy=row.querySelector('.sp-by');if(spBy)spBy.value='';
+      const spBm=row.querySelector('.sp-bm');if(spBm)spBm.value='吉時';
+      const spDy=row.querySelector('.sp-dy');if(spDy)spDy.value='';
+      const spDm=row.querySelector('.sp-dm');if(spDm)spDm.value='';
+      row.querySelector('.sp-rel').value='元配';
+    }
     else row.remove();
   });
   const bd=document.getElementById('fbd');if(bd)bd.value='';
-  const bt=document.getElementById('fbt');if(bt)bt.value='';
+  const bt=document.getElementById('fbt');if(bt)bt.value='吉時';
   const dd=document.getElementById('fdd');if(dd)dd.value='';
   const dt=document.getElementById('fdt');if(dt)dt.value='';
+  const fb=document.getElementById('fb-result');if(fb)fb.style.display='none';
+  const fd=document.getElementById('fd-result');if(fd)fd.style.display='none';
 }
 
 /* ============================================================
@@ -1580,15 +1628,15 @@ function addEditSpouseRow(name,rel,isOnly,by,bm,dy,dm){
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
       '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（出生年份）</label>'+
-        '<input type="text" class="esp-by" value="'+by+'" placeholder="民國77年 / 1988" style="'+I+'"></div>'+
+        '<input type="text" class="esp-by" value="'+by+'" placeholder="例：1988/04/12" style="'+I+'"></div>'+
       '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">生於（月日時辰）</label>'+
-        '<input type="text" class="esp-bm" value="'+bm+'" placeholder="三月廿六日戌時" style="'+I+'"></div>'+
+        '<select class="esp-bm" style="'+I.replace('font-size:15px','font-size:14px')+'"><option value="吉時"'+(bm==='吉時'?' selected':'')+'>吉時</option><option value="子時"'+(bm==='子時'?' selected':'')+'>子時</option><option value="丑時"'+(bm==='丑時'?' selected':'')+'>丑時</option><option value="寅時"'+(bm==='寅時'?' selected':'')+'>寅時</option><option value="卯時"'+(bm==='卯時'?' selected':'')+'>卯時</option><option value="辰時"'+(bm==='辰時'?' selected':'')+'>辰時</option><option value="巳時"'+(bm==='巳時'?' selected':'')+'>巳時</option><option value="午時"'+(bm==='午時'?' selected':'')+'>午時</option><option value="未時"'+(bm==='未時'?' selected':'')+'>未時</option><option value="申時"'+(bm==='申時'?' selected':'')+'>申時</option><option value="酉時"'+(bm==='酉時'?' selected':'')+'>酉時</option><option value="戌時"'+(bm==='戌時'?' selected':'')+'>戌時</option><option value="亥時"'+(bm==='亥時'?' selected':'')+'>亥時</option></select></div>'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
       '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（去世年份，在世留空）</label>'+
-        '<input type="text" class="esp-dy" value="'+dy+'" placeholder="在世者留空" style="'+I+'"></div>'+
+        '<input type="text" class="esp-dy" value="'+dy+'" placeholder="例：1998/11/20" style="'+I+'"></div>'+
       '<div class="fi"><label style="font-size:11px;color:var(--ink3);font-family:var(--sans)">卒於（月日時辰）</label>'+
-        '<input type="text" class="esp-dm" value="'+dm+'" placeholder="十一月二十日甲時" style="'+I+'"></div>'+
+        '<select class="esp-dm" style="'+I.replace('font-size:15px','font-size:14px')+'"><option value=""'+(dm===''?' selected':'')+'>不填</option><option value="子時"'+(dm==='子時'?' selected':'')+'>子時</option><option value="丑時"'+(dm==='丑時'?' selected':'')+'>丑時</option><option value="寅時"'+(dm==='寅時'?' selected':'')+'>寅時</option><option value="卯時"'+(dm==='卯時'?' selected':'')+'>卯時</option><option value="辰時"'+(dm==='辰時'?' selected':'')+'>辰時</option><option value="巳時"'+(dm==='巳時'?' selected':'')+'>巳時</option><option value="午時"'+(dm==='午時'?' selected':'')+'>午時</option><option value="未時"'+(dm==='未時'?' selected':'')+'>未時</option><option value="申時"'+(dm==='申時'?' selected':'')+'>申時</option><option value="酉時"'+(dm==='酉時'?' selected':'')+'>酉時</option><option value="戌時"'+(dm==='戌時'?' selected':'')+'>戌時</option><option value="亥時"'+(dm==='亥時'?' selected':'')+'>亥時</option><option value="吉時"'+(dm==='吉時'?' selected':'')+'>吉時</option></select></div>'+
     '</div>'+
     (!isOnly?'<button type="button" onclick="this.parentNode.remove()" style="position:absolute;top:8px;right:8px;background:rgba(139,26,26,0.12);border:none;border-radius:50%;width:24px;height:24px;font-size:14px;color:var(--red);cursor:pointer;padding:0;line-height:1;touch-action:manipulation">✕</button>':'');
   container.appendChild(div);
@@ -1616,10 +1664,16 @@ function saveEdit(){
     const n=row.querySelector('.esp-name').value.trim();
     if(!n)return;
     const r=row.querySelector('.esp-rel').value;
-    const sby=((row.querySelector('.esp-by')||{}).value||'').trim();
-    const sbm=((row.querySelector('.esp-bm')||{}).value||'').trim();
-    const sdy=((row.querySelector('.esp-dy')||{}).value||'').trim();
-    const sdm=((row.querySelector('.esp-dm')||{}).value||'').trim();
+    const sby_raw=((row.querySelector('.esp-by')||{}).value||'').trim();
+    const espBmEl=row.querySelector('.esp-bm');
+    const sbm_sc=espBmEl?espBmEl.value:'吉時';
+    const sby=spDateToLunar(sby_raw,'','by');
+    const sbm=spDateToLunar(sby_raw,sbm_sc,'b');
+    const sdy_raw=((row.querySelector('.esp-dy')||{}).value||'').trim();
+    const espDmEl=row.querySelector('.esp-dm');
+    const sdm_sc=espDmEl?espDmEl.value:'';
+    const sdy=spDateToLunar(sdy_raw,'','by');
+    const sdm=sdy_raw?spDateToLunar(sdy_raw,sdm_sc,'d'):'';
     newSpouses.push({name:n,rel:r,by:sby,bm:sbm,dy:sdy,dm:sdm});
   });
   m.spouses=newSpouses;
@@ -1785,6 +1839,39 @@ function downloadReport(){
 }
 
 /* ============================================================
+
+// 配偶日期換算：輸入西元年月日字串＋時辰，回傳農曆格式字串
+function spConvertDate(row, type){
+  const byEl=row.querySelector('.sp-by');
+  const dyEl=row.querySelector('.sp-dy');
+  const scEl=row.querySelector(type==='b'?'.sp-bm':'.sp-sc-d, .sp-dm');
+  const dateStr=type==='b'?(byEl?byEl.value:''):(dyEl?dyEl.value:'');
+  const sc=scEl?scEl.value:(type==='b'?'吉時':'');
+  return spDateToLunar(dateStr.trim(), sc, type);
+}
+
+function espConvertDate(dateStr, sc, type){
+  return spDateToLunar(dateStr.trim(), sc, type);
+}
+
+function spDateToLunar(dateStr, sc, type){
+  if(!dateStr){
+    return type==='b'?(sc||'吉時'):''; // 出生沒日期只填時辰，去世沒日期回空
+  }
+  const parts=dateStr.replace(/-/g,'/').split('/');
+  if(parts.length<3)return dateStr;
+  const year=parseInt(parts[0]),month=parseInt(parts[1]),day=parseInt(parts[2]);
+  if(!year||!month||!day)return dateStr;
+  const roc=getROCYear(year);
+  const sexag=getSexagenary(year);
+  const lunar=solarToLunar(year,month,day);
+  const lm=LUNAR_MONTHS_CH[lunar.month-1]||'';
+  const ld=LUNAR_DAYS_CH[lunar.day-1]||'';
+  const shichen=sc||(type==='b'?'吉時':'');
+  const byVal='西元'+year+'/'+String(month).padStart(2,'0')+'/'+String(day).padStart(2,'0')+' ／ '+roc+'（'+sexag+'）';
+  const bmVal='農曆'+lm+'月'+ld+(shichen?' '+shichen:'');
+  return type==='by'?byVal:bmVal;
+}
 
 /* ===== 行業分類資料（依台灣主計總處行業標準分類第11次修訂）===== */
 const INDUSTRY_DATA={
