@@ -215,6 +215,17 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
 <div id="p-tree" class="panel active">
   <div class="stitle"><span>族譜樹狀圖</span></div>
   <p class="t-hint">👆 點擊人名查看詳細資料 ｜ 左右滑動捲動族譜</p>
+
+  <!-- 個人五代族譜 -->
+  <div style="margin-bottom:14px;padding:12px 14px;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.2);border-radius:10px">
+    <div style="font-size:13px;font-weight:700;color:var(--gold);font-family:var(--sans);margin-bottom:8px">👤 個人五代族譜（以本人為中心顯示上下各兩代）</div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="ptree-input" placeholder="輸入族人姓名…" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--serif);font-size:15px;background:rgba(255,255,255,0.9);color:var(--ink)" onkeyup="if(event.key==='Enter')buildPersonalTree()">
+      <button onclick="buildPersonalTree()" style="padding:10px 16px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:14px;cursor:pointer;touch-action:manipulation">查看</button>
+      <button onclick="document.getElementById('ptree-container').innerHTML='';document.getElementById('ptree-input').value=''" style="padding:10px 10px;background:transparent;color:var(--ink3);border:1px solid var(--border);border-radius:8px;font-family:var(--sans);font-size:12px;cursor:pointer;touch-action:manipulation">清除</button>
+    </div>
+    <div id="ptree-container" style="margin-top:10px;overflow-x:auto"></div>
+  </div>
   <div class="t-scroll" id="ts">
     <svg id="tsvg" height="780"><defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><g id="tl"></g><g id="tn"></g></svg>
   </div>
@@ -437,7 +448,9 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
     </div>
     <div class="fg">
       <div class="fi"><label>出生年份（農曆/民國，可手動修改）</label><input type="text" id="fby" placeholder="民國77年 / 乾隆甲牛年"></div>
-      <div class="fi"><label>出生月日時辰（可手動修改）</label><input type="text" id="fbm" placeholder="三月廿六日戌時"></div>
+      <div class="fi"><label>出生月日時辰（可手動修改）
+        <button type="button" onclick="showShichenPicker('fbm')" style="margin-left:8px;font-size:11px;padding:2px 8px;background:var(--parch2);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:var(--sans);color:var(--ink2);touch-action:manipulation">選時辰</button>
+      </label><input type="text" id="fbm" placeholder="三月廿六日戌時（或吉時）"></div>
     </div>
   </div>
 
@@ -458,7 +471,9 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
     </div>
     <div class="fg">
       <div class="fi"><label>去世年份（農曆/民國，可手動修改）</label><input type="text" id="fdy" placeholder="民國87年"></div>
-      <div class="fi"><label>去世月日時辰（可手動修改）</label><input type="text" id="fdm" placeholder="十一月二十日甲時"></div>
+      <div class="fi"><label>去世月日時辰（可手動修改）
+        <button type="button" onclick="showShichenPicker('fdm')" style="margin-left:8px;font-size:11px;padding:2px 8px;background:var(--parch2);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:var(--sans);color:var(--ink2);touch-action:manipulation">選時辰</button>
+      </label><input type="text" id="fdm" placeholder="十一月二十日甲時（或吉時）"></div>
     </div>
   </div>
 
@@ -616,47 +631,53 @@ const GL={1:'#fff0f0',2:'#ffeded',3:'#fff3ee',4:'#fff8ee',5:'#fffcee',6:'#edfff3
    DATABASE
 ============================================================ */
 let db=[
-  {id:1,n:'王山公',g:1,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏良娘',lo:'',by:'吉年',bm:'吉月吉日吉時',dy:'吉年',dm:'七月二十二日吉時',nt:'第一代始祖',su:'維杰整理'},
-  {id:2,n:'林氏良娘',g:1,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'王山公',lo:'',by:'吉年',bm:'吉月吉日吉時',dy:'吉年',dm:'五月三日吉時',nt:'',su:''},
-  {id:3,n:'木生公',g:2,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏金娘',lo:'',by:'子年',bm:'吉月吉日吉時',dy:'吉年',dm:'五月二十一日吉時',nt:'',su:''},
-  {id:4,n:'林氏金娘',g:2,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'木生公',lo:'',by:'酉年',bm:'十二月吉日吉時',dy:'吉年',dm:'八月四日吉時',nt:'',su:''},
-  {id:5,n:'尊意公',g:3,sx:'男',r:'祖公',fa:'',mo:'',sp:'游氏柳娘',lo:'',by:'亥年',bm:'三月二十七日吉時',dy:'吉年',dm:'九月三日吉時',nt:'',su:''},
-  {id:6,n:'游氏柳娘',g:3,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'尊意公',lo:'',by:'午年',bm:'吉月吉日吉時',dy:'吉年',dm:'正月十一日吉時',nt:'',su:''},
-  {id:7,n:'成雙公',g:4,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏荊娘',lo:'',by:'牛年',bm:'吉月吉日吉時',dy:'吉年',dm:'六月十八日吉時',nt:'',su:''},
-  {id:8,n:'林氏荊娘',g:4,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'成雙公',lo:'',by:'雍正乙卯年',bm:'九月十三日吉時',dy:'嘉慶丁卯年',dm:'九月十九日酉時',nt:'',su:''},
-  {id:9,n:'媽賞公',g:5,sx:'男',r:'祖公',fa:'',mo:'',sp:'鄭氏合娘',lo:'',by:'乾隆甲牛年',bm:'十月二十五日寅時',dy:'嘉慶卯年',dm:'三月二十三日卯時',nt:'',su:''},
-  {id:10,n:'鄭氏合娘',g:5,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'媽賞公',lo:'',by:'乾隆戊戌年',bm:'二月二日吉時',dy:'嘉慶丙寅年',dm:'七月十二日吉時',nt:'',su:''},
-  {id:11,n:'光輝公',g:6,sx:'男',r:'祖公',fa:'',mo:'',sp:'林氏美娘',lo:'',by:'嘉慶戊太年',bm:'九月四日卯時',dy:'咸豐吉年',dm:'二月三日丑時',nt:'',su:''},
-  {id:12,n:'林氏美娘',g:6,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'光輝公',lo:'',by:'乙丑年',bm:'十月九日卯時',dy:'光緒壬辰年',dm:'二月十二日未時',nt:'正室',su:''},
-  {id:13,n:'梁氏粉',g:6,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'光輝公',lo:'',by:'嘉慶乙丑年',bm:'六月九日午時',dy:'道光辛巳年',dm:'四月一日寅時',nt:'次室',su:''},
-  {id:14,n:'新居公',g:7,sx:'男',r:'祖公',fa:'',mo:'',sp:'卓氏農娘',lo:'',by:'道光發年',bm:'八月九日寅時',dy:'明治壬寅年',dm:'十一月十六日亥時',nt:'',su:''},
-  {id:15,n:'卓氏農娘',g:7,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'新居公',lo:'',by:'道光丁酉年',bm:'十二月二十三日酉時',dy:'明治辛乙年',dm:'八月廿四日未時',nt:'正室',su:''},
-  {id:16,n:'周氏腰',g:7,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'新居公',lo:'',by:'道光甲申年',bm:'七月六日申時',dy:'咸豐壬子年',dm:'八月二十二日酉時',nt:'次室',su:''},
-  {id:17,n:'恒春公（義春公）',g:8,sx:'男',r:'祖公',fa:'',mo:'',sp:'陳氏印娘',lo:'',by:'道光丙牛年',bm:'十一月三日申時',dy:'明治壬寅年',dm:'十一月七日未時',nt:'',su:''},
-  {id:18,n:'陳氏印娘',g:8,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'恒春公（義春公）',lo:'',by:'道光庚戌年',bm:'十一月十五日卯時',dy:'昭和癸酉年',dm:'五月十八日酉時',nt:'',su:''},
-  {id:19,n:'景煌公',g:9,sx:'男',r:'長子',fa:'恒春公（義春公）',mo:'陳氏印娘',sp:'陳氏蜜',lo:'',by:'明治辛未年',bm:'十一月二十七日子時',dy:'昭和戌寅年',dm:'二月五日未時',nt:'長子',su:''},
-  {id:20,n:'陳氏蜜',g:9,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'景煌公',lo:'',by:'明治壬申年',bm:'五月二十五日卯時',dy:'昭和丙寅年',dm:'六月十四日戌時',nt:'景煌公配偶',su:''},
-  {id:21,n:'景潭公',g:9,sx:'男',r:'祖公',fa:'',mo:'',sp:'',lo:'',by:'光緒庚辰年',bm:'九月十九日亥時',dy:'光緒戌戌年',dm:'三月十日未時',nt:'另份記載待確認',su:''},
-  {id:22,n:'曾慶璋',g:10,sx:'男',r:'長子',fa:'景煌公',mo:'陳氏蜜',sp:'陳氏救',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:23,n:'陳氏救',g:10,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾慶璋',lo:'',by:'',bm:'',dy:'',dm:'',nt:'慶璋配偶',su:''},
-  {id:24,n:'曾慶材',g:10,sx:'男',r:'次子',fa:'',mo:'',sp:'曾林共',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:25,n:'曾林共',g:10,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾慶材',lo:'',by:'',bm:'',dy:'',dm:'',nt:'慶材配偶',su:''},
-  {id:26,n:'曾添泉',g:10,sx:'男',r:'長子',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:27,n:'曾培元',g:10,sx:'男',r:'次子',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:28,n:'曾氏鳳凰',g:10,sx:'女',r:'長女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:29,n:'曾業鑿',g:11,sx:'男',r:'長子',fa:'曾慶璋',mo:'陳氏救',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:30,n:'曾澄秋',g:11,sx:'男',r:'次子',fa:'曾慶璋',mo:'陳氏救',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:31,n:'曾秋芳',g:11,sx:'男',r:'三子',fa:'曾慶璋',mo:'陳氏救',sp:'張氏寶蓮',lo:'',by:'民國十年',bm:'九月　未時',dy:'民國八十七年',dm:'十一月二十日甲時',nt:'',su:''},
-  {id:32,n:'張氏寶蓮',g:11,sx:'女',r:'祖媽（媳）',fa:'',mo:'',sp:'曾秋芳',lo:'',by:'民國壬戌年',bm:'十一月十一日亥時',dy:'民國癸卯年',dm:'十月十二日午時',nt:'秋芳配偶',su:''},
-  {id:33,n:'曾公林秋田',g:11,sx:'男',r:'祖公',fa:'',mo:'',sp:'',lo:'',by:'民國廿四年',bm:'十一月廿二日寅時',dy:'民國一○五年',dm:'七月廿六日辰時',nt:'另份記載',su:''},
-  {id:34,n:'曾維珍',g:12,sx:'男',r:'長子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:35,n:'曾維燦',g:12,sx:'男',r:'次子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:36,n:'曾維能',g:12,sx:'男',r:'三子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:37,n:'曾維杰',g:12,sx:'男',r:'四子',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'台灣',by:'',bm:'',dy:'',dm:'',nt:'存冊者・造隆電器工程股份有限公司',su:'本人'},
-  {id:38,n:'曾彩絨',g:12,sx:'女',r:'長女',fa:'曾秋芳',mo:'張氏寶蓮',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:39,n:'曾淑真',g:12,sx:'女',r:'次女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:40,n:'曾淑賢',g:12,sx:'女',r:'三女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
-  {id:41,n:'曾淑華',g:12,sx:'女',r:'四女',fa:'',mo:'',sp:'',lo:'',by:'',bm:'',dy:'',dm:'',nt:'',su:''},
+  {id:1,n:"王山公",g:1,sx:"男",r:"祖公",fa:"",mo:"",sp:"林氏良娘",spouses:[{"name": "林氏良娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"吉年",bm:"吉月吉日吉時",dy:"吉年",dm:"七月二十二日吉時",nt:"第一代始祖",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:2,n:"林氏良娘",g:1,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"王山公",spouses:[{"name": "王山公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"吉年",bm:"吉月吉日吉時",dy:"吉年",dm:"五月三日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:3,n:"木生公",g:2,sx:"男",r:"祖公",fa:"",mo:"",sp:"林氏金娘",spouses:[{"name": "林氏金娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"子年",bm:"吉月吉日吉時",dy:"吉年",dm:"五月二十一日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:4,n:"林氏金娘",g:2,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"木生公",spouses:[{"name": "木生公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"酉年",bm:"十二月吉日吉時",dy:"吉年",dm:"八月四日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:5,n:"尊意公",g:3,sx:"男",r:"祖公",fa:"",mo:"",sp:"游氏柳娘",spouses:[{"name": "游氏柳娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"亥年",bm:"三月二十七日吉時",dy:"吉年",dm:"九月三日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:6,n:"游氏柳娘",g:3,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"尊意公",spouses:[{"name": "尊意公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"午年",bm:"吉月吉日吉時",dy:"吉年",dm:"正月十一日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:7,n:"成雙公",g:4,sx:"男",r:"祖公",fa:"",mo:"",sp:"林氏荊娘",spouses:[{"name": "林氏荊娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"牛年",bm:"吉月吉日吉時",dy:"吉年",dm:"六月十八日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:8,n:"林氏荊娘",g:4,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"成雙公",spouses:[{"name": "成雙公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"雍正乙卯年",bm:"九月十三日吉時",dy:"嘉慶丁卯年",dm:"九月十九日酉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:9,n:"媽賞公",g:5,sx:"男",r:"祖公",fa:"",mo:"",sp:"鄭氏合娘",spouses:[{"name": "鄭氏合娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"乾隆甲牛年",bm:"十月二十五日寅時",dy:"嘉慶卯年",dm:"三月二十三日卯時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:10,n:"鄭氏合娘",g:5,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"媽賞公",spouses:[{"name": "媽賞公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"乾隆戊戌年",bm:"二月二日吉時",dy:"嘉慶丙寅年",dm:"七月十二日吉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:11,n:"光輝公",g:6,sx:"男",r:"祖公",fa:"",mo:"",sp:"林氏美娘",spouses:[{"name": "林氏美娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"嘉慶戊太年",bm:"九月四日卯時",dy:"咸豐吉年",dm:"二月三日丑時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:12,n:"林氏美娘",g:6,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"光輝公",spouses:[{"name": "光輝公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"乙丑年",bm:"十月九日卯時",dy:"光緒壬辰年",dm:"二月十二日未時",nt:"正室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:13,n:"梁氏粉",g:6,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"光輝公",spouses:[{"name": "光輝公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"嘉慶乙丑年",bm:"六月九日午時",dy:"道光辛巳年",dm:"四月一日寅時",nt:"次室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:14,n:"新居公",g:7,sx:"男",r:"祖公",fa:"",mo:"",sp:"卓氏農娘",spouses:[{"name": "卓氏農娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光發年",bm:"八月九日寅時",dy:"明治壬寅年",dm:"十一月十六日亥時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:15,n:"卓氏農娘",g:7,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"新居公",spouses:[{"name": "新居公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光丁酉年",bm:"十二月二十三日酉時",dy:"明治辛乙年",dm:"八月廿四日未時",nt:"正室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:16,n:"周氏腰",g:7,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"新居公",spouses:[{"name": "新居公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光甲申年",bm:"七月六日申時",dy:"咸豐壬子年",dm:"八月二十二日酉時",nt:"次室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:17,n:"恒春公（義春公）",g:8,sx:"男",r:"祖公",fa:"",mo:"",sp:"陳氏印娘",spouses:[{"name": "陳氏印娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光丙牛年",bm:"十一月三日申時",dy:"明治壬寅年",dm:"十一月七日未時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:18,n:"陳氏印娘",g:8,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"恒春公",spouses:[{"name": "恒春公", "rel": "義春公", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光庚戌年",bm:"十一月十五日卯時",dy:"昭和癸酉年",dm:"五月十八日酉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:19,n:"景煌公",g:9,sx:"男",r:"長子",fa:"恒春公（義春公）",mo:"陳氏印娘",sp:"陳氏蜜",spouses:[{"name": "陳氏蜜", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"明治辛未年",bm:"十一月二十七日子時",dy:"昭和戌寅年",dm:"二月五日未時",nt:"長子",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:20,n:"陳氏蜜",g:9,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"景煌公",spouses:[{"name": "景煌公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"明治壬申年",bm:"五月二十五日卯時",dy:"昭和丙寅年",dm:"六月十四日戌時",nt:"景煌公配偶",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:21,n:"景潭公",g:9,sx:"男",r:"祖公",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"光緒庚辰年",bm:"九月十九日亥時",dy:"光緒戌戌年",dm:"三月十日未時",nt:"另份記載待確認",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:22,n:"曾慶璋",g:10,sx:"男",r:"長子",fa:"景煌公",mo:"陳氏蜜",sp:"陳氏救",spouses:[{"name": "陳氏救", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:23,n:"陳氏救",g:10,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"曾慶璋",spouses:[{"name": "曾慶璋", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"",bm:"",dy:"",dm:"",nt:"慶璋配偶",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:24,n:"曾慶材",g:10,sx:"男",r:"次子",fa:"",mo:"",sp:"曾林共",spouses:[{"name": "曾林共", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:25,n:"曾林共",g:10,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"曾慶材",spouses:[{"name": "曾慶材", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"",bm:"",dy:"",dm:"",nt:"慶材配偶",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:26,n:"曾添泉",g:10,sx:"男",r:"長子",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:27,n:"曾培元",g:10,sx:"男",r:"次子",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:28,n:"曾氏鳳凰",g:10,sx:"女",r:"長女",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:29,n:"曾業鑿",g:11,sx:"男",r:"長子",fa:"曾慶璋",mo:"陳氏救",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:30,n:"曾澄秋",g:11,sx:"男",r:"次子",fa:"曾慶璋",mo:"陳氏救",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:31,n:"曾秋芳",g:11,sx:"男",r:"三子",fa:"曾慶璋",mo:"陳氏救",sp:"張氏寶蓮",spouses:[{"name": "張氏寶蓮", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"民國十年",bm:"九月　未時",dy:"民國八十七年",dm:"十一月二十日甲時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:32,n:"張氏寶蓮",g:11,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"曾秋芳",spouses:[{"name": "曾秋芳", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"民國壬戌年",bm:"十一月十一日亥時",dy:"民國癸卯年",dm:"十月十二日午時",nt:"秋芳配偶",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:33,n:"曾公林秋田",g:11,sx:"男",r:"祖公",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"民國廿四年",bm:"十一月廿二日寅時",dy:"民國一○五年",dm:"七月廿六日辰時",nt:"另份記載",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:34,n:"曾維珍",g:12,sx:"男",r:"長子",fa:"曾秋芳",mo:"張氏寶蓮",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:35,n:"曾維燦",g:12,sx:"男",r:"次子",fa:"曾秋芳",mo:"張氏寶蓮",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:36,n:"曾維能",g:12,sx:"男",r:"三子",fa:"曾秋芳",mo:"張氏寶蓮",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:37,n:"曾維杰",g:12,sx:"男",r:"四子",fa:"曾秋芳",mo:"張氏寶蓮",sp:"廖小明",spouses:[{"name": "廖小明", "rel": "元配", "by": "", "bm": "", "dy": "", "dm": ""}, {"name": "賴逸華", "rel": "側室", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"台灣",by:"1959/11/7",bm:"",dy:"",dm:"",nt:"存冊者・造隆電氣工程股份有限公司",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:38,n:"曾彩絨",g:12,sx:"女",r:"長女",fa:"曾秋芳",mo:"張氏寶蓮",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:39,n:"曾淑真",g:12,sx:"女",r:"次女",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:40,n:"曾淑賢",g:12,sx:"女",r:"三女",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:41,n:"曾淑華",g:12,sx:"女",r:"四女",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:42,n:"曾淑賢",g:12,sx:"女",r:"三女",fa:"",mo:"",sp:"林炳正",spouses:[{"name": "林炳正", "rel": "現任夫", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"台灣",by:"西元1955/07/01",bm:"／ 民國44年（乙未年） 農曆六月十二",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:43,n:"曾科迪",g:13,sx:"男",r:"長子",fa:"曾維杰",mo:"廖小明",sp:"",spouses:[],lo:"印尼",by:"西元1988/04/12",bm:"／ 民國77年（戊辰年） 農曆二月廿六",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:44,n:"曾薏瑾",g:13,sx:"女",r:"長女",fa:"曾維杰",mo:"廖小明",sp:"張經緯",spouses:[{"name": "張經緯", "rel": "現任夫", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"台北",by:"西元1989/07/06",bm:"／ 民國78年（己巳年） 農曆六月初三",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:45,n:"曾信賀",g:13,sx:"男",r:"次子",fa:"曾維杰",mo:"廖小明",sp:"",spouses:[],lo:"新北市",by:"西元1992/07/17",bm:"／ 民國81年（壬申年） 農曆六月十八",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:46,n:"張翊嘉",g:14,sx:"男",r:"長子",fa:"張經緯",mo:"曾薏瑾",sp:"",spouses:[],lo:"",by:"西元2021/02/04",bm:"／ 民國110年（辛丑年） 農曆月廿三",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:47,n:"張承伽",g:14,sx:"男",r:"次子",fa:"",mo:"曾薏瑾",sp:"",spouses:[],lo:"台北",by:"西元2023/03/11",bm:"／ 民國112年（癸卯年） 農曆二月二十",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''}
 ];
 let nid=200;
 
@@ -832,6 +853,47 @@ function getShichen(hour){
   if(hour<21)return '戌時';return '亥時';
 }
 
+// 時辰選項（含吉時）- 用於手動選擇
+const SHICHEN_OPTIONS=['子時（23-01時）','丑時（01-03時）','寅時（03-05時）','卯時（05-07時）',
+  '辰時（07-09時）','巳時（09-11時）','午時（11-13時）','未時（13-15時）',
+  '申時（15-17時）','酉時（17-19時）','戌時（19-21時）','亥時（21-23時）','吉時（不詳）'];
+
+function showShichenPicker(targetId){
+  // 關閉其他picker
+  document.querySelectorAll('.sc-picker').forEach(function(el){el.remove();});
+  const el=document.getElementById(targetId);
+  if(!el)return;
+  const div=document.createElement('div');
+  div.className='sc-picker';
+  div.style.cssText='position:absolute;z-index:9999;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:260px';
+  SHICHEN_OPTIONS.forEach(function(s){
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.textContent=s;
+    btn.style.cssText='padding:8px 6px;background:var(--parch);border:1px solid var(--border);border-radius:6px;font-family:var(--serif);font-size:13px;cursor:pointer;text-align:center;touch-action:manipulation';
+    btn.onclick=function(){
+      // 只取時辰名（去掉括號說明）
+      const scName=s.replace(/（.*）/,'');
+      el.value=el.value.replace(/[子丑寅卯辰巳午未申酉戌亥吉]時/,'').trim()+' '+scName;
+      el.value=el.value.trim();
+      div.remove();
+    };
+    div.appendChild(btn);
+  });
+  // 點其他地方關閉
+  setTimeout(function(){
+    document.addEventListener('click',function close(e){
+      if(!div.contains(e.target)&&e.target!==el){div.remove();document.removeEventListener('click',close);}
+    });
+  },100);
+  // 定位到input下方
+  const rect=el.getBoundingClientRect();
+  div.style.left=rect.left+'px';
+  div.style.top=(rect.bottom+window.scrollY+4)+'px';
+  div.style.position='fixed';
+  document.body.appendChild(div);
+}
+
 function getROCYear(year){
   if(year<=1911)return '清朝'+year+'年';
   return '民國'+(year-1911)+'年';
@@ -969,17 +1031,16 @@ function sw(id,btn){
 const NW=102,NH=33,HG=9,C1=44,C2=510;
 
 function buildTree(){
-  // Clear everything
   document.getElementById('tn').innerHTML='';
   document.getElementById('tl').innerHTML='';
   const pos={};
   const svg=document.getElementById('tsvg');
 
-  // ---- Left col: gen 1-8 ----
-  [1,2,3,4,5,6,7,8].forEach((g,gi)=>{
-    const ms=db.filter(m=>m.g===g);
+  // ---- 左側：第1-8代直系 ----
+  [1,2,3,4,5,6,7,8].forEach(function(g,gi){
+    const ms=db.filter(function(m){return m.g===g;});
     const ry=26+gi*80;
-    ms.forEach((m,i)=>{
+    ms.forEach(function(m,i){
       const x=C1+20+i*(NW+HG);
       pos[m.id]={x,y:ry,cx:x+NW/2,cy:ry+NH/2};
       mkNode(m,x,ry);
@@ -990,42 +1051,45 @@ function buildTree(){
       mkl('tl',a.x+NW,a.cy,b.x,b.cy,'rgba(139,105,20,0.3)',0.8,'4 3');
     }
     if(gi<7){
-      const ax=ms.reduce((s,m)=>s+pos[m.id].cx,0)/ms.length;
+      const ax=ms.length>0?ms.reduce(function(s,m){return s+pos[m.id].cx;},0)/ms.length:C1+80;
       mkl('tl',ax,ry+NH,ax,ry+80,GC[g]||'#aaa',0.6,'3 3');
     }
   });
 
-  // ---- Right col: gen 9+ (dynamic, includes newly added members) ----
-  const maxGen=Math.max(...db.map(m=>m.g));
+  // ---- 右側：第9代以後，累積y值避免重疊 ----
+  const maxGen=db.length>0?Math.max.apply(null,db.map(function(m){return m.g;})):9;
+  let curY=26; // 目前累積的Y位置
   for(let g=9;g<=maxGen;g++){
-    const ms=db.filter(m=>m.g===g);
+    const ms=db.filter(function(m){return m.g===g;});
     if(ms.length===0)continue;
-    const gi=g-9;
-    const rowH=Math.ceil(ms.length/4)*(NH+8)+80;
-    const ry=26+gi*Math.max(160, rowH);
+    const ry=curY;
     const cols=Math.min(ms.length,4);
-    ms.forEach((m,i)=>{
+    const rows=Math.ceil(ms.length/cols);
+    ms.forEach(function(m,i){
       const c=i%cols,r=Math.floor(i/cols);
-      const x=C2+c*(NW+HG),y=ry+r*(NH+8);
+      const x=C2+c*(NW+HG),y=ry+r*(NH+10);
       pos[m.id]={x,y,cx:x+NW/2,cy:y+NH/2};
       mkNode(m,x,y);
     });
     mkt('tl','第'+g+'代',C2-5,ry+NH/2+5,10,GC[g]||'#555','end');
-    // Connect to next gen
-    const nextMs=db.filter(m=>m.g===g+1);
+    // 連線到下一代
+    const nextMs=db.filter(function(m){return m.g===g+1;});
     if(nextMs.length>0&&ms[0]){
       const p=pos[ms[0].id];
-      if(p) mkl('tl',p.cx,ry+NH,p.cx,ry+160,GC[g]||'#aaa',0.6,'3 3');
+      const gap=80;
+      if(p) mkl('tl',p.cx,ry+NH+(rows-1)*(NH+10)+NH,p.cx,ry+NH+(rows-1)*(NH+10)+NH+gap,GC[g]||'#aaa',0.6,'3 3');
     }
+    // 累積Y：這代所有行的高度 + 80px間隔
+    curY+=rows*(NH+10)+80;
   }
 
-  // Bridge arrow gen8 → gen9
-  const g8=db.filter(m=>m.g===8),g9=db.filter(m=>m.g===9);
+  // 橋接箭頭 gen8 → gen9
+  const g8=db.filter(function(m){return m.g===8;}),g9=db.filter(function(m){return m.g===9;});
   if(g8[0]&&g9[0]){
     const p8=pos[g8[0].id],p9=pos[g9[0].id];
     if(p8&&p9){
       const path=mkS('path');
-      path.setAttribute('d',`M${p8.cx} ${p8.y+NH} L${p8.cx} ${p8.y+NH+16} L${p9.cx} ${p8.y+NH+16} L${p9.cx} ${p9.y}`);
+      path.setAttribute('d','M'+p8.cx+' '+(p8.y+NH)+' L'+p8.cx+' '+(p8.y+NH+16)+' L'+p9.cx+' '+(p8.y+NH+16)+' L'+p9.cx+' '+p9.y);
       path.setAttribute('fill','none');path.setAttribute('stroke','rgba(139,105,20,0.4)');
       path.setAttribute('stroke-width','1');path.setAttribute('stroke-dasharray','5 3');
       path.setAttribute('marker-end','url(#arr)');
@@ -1034,28 +1098,28 @@ function buildTree(){
     }
   }
 
-  // Divider
+  // 分隔線
   const dv=mkS('line');
-  ['x1','y1','x2','y2'].forEach((a,i)=>dv.setAttribute(a,[480,6,480,770][i]));
+  ['x1','y1','x2','y2'].forEach(function(a,i){dv.setAttribute(a,[480,6,480,Math.max(770,curY+100)][i]);});
   dv.setAttribute('stroke','rgba(139,105,20,0.15)');dv.setAttribute('stroke-width','0.5');
   dv.setAttribute('stroke-dasharray','8 4');
   document.getElementById('tl').insertBefore(dv,document.getElementById('tl').firstChild);
   mkt('tn','直系（一至八代）',232,12,10,'rgba(139,105,20,0.6)','middle');
   mkt('tn','九代以後子孫',720,12,10,'rgba(139,105,20,0.6)','middle');
 
-  // Resize SVG viewBox to fit all content
-  const allNodes=document.querySelectorAll('#tn rect');
+  // 調整SVG大小
+  const allRects=document.querySelectorAll('#tn rect');
   let maxX=900,maxY=780;
-  allNodes.forEach(r=>{
+  allRects.forEach(function(r){
     const x=parseFloat(r.getAttribute('x')||0)+parseFloat(r.getAttribute('width')||0);
     const y=parseFloat(r.getAttribute('y')||0)+parseFloat(r.getAttribute('height')||0);
     if(x>maxX)maxX=x;if(y>maxY)maxY=y;
   });
-  svg.setAttribute('viewBox',`0 0 ${maxX+20} ${maxY+30}`);
+  const finalH=Math.max(maxY+60,curY+60);
+  svg.setAttribute('viewBox','0 0 '+(maxX+20)+' '+finalH);
   svg.setAttribute('width',maxX+20);
-  svg.setAttribute('height',maxY+30);
+  svg.setAttribute('height',finalH);
 }
-
 function mkNode(m,x,y){
   const g=mkS('g');
   g.setAttribute('class','t-node');g.dataset.id=m.id;
@@ -1766,6 +1830,127 @@ function updateEditIndustrySub(){
       const o=document.createElement('option');o.value=s;o.textContent=s;sub.appendChild(o);
     });
   }
+}
+
+/* ===== 個人五代族譜 ===== */
+function buildPersonalTree(){
+  const name=(document.getElementById('ptree-input').value||'').trim();
+  const container=document.getElementById('ptree-container');
+  if(!name){container.innerHTML='<div style="font-size:13px;color:var(--ink3);font-family:var(--sans);padding:8px 0">請輸入族人姓名</div>';return;}
+
+  const me=db.find(function(m){return m.n.includes(name);});
+  if(!me){container.innerHTML='<div style="font-size:13px;color:var(--red);font-family:var(--sans);padding:8px 0">找不到「'+name+'」，請確認姓名</div>';return;}
+
+  // 找祖父母（父親的父母）
+  const father=me.fa?db.find(function(m){return m.n===me.fa;}):null;
+  const mother=me.mo?db.find(function(m){return m.n===me.mo;}):null;
+  const gf=father&&father.fa?db.find(function(m){return m.n===father.fa;}):null;
+  const gm=father&&father.mo?db.find(function(m){return m.n===father.mo;}):null;
+  const mgf=mother&&mother.fa?db.find(function(m){return m.n===mother.fa;}):null;
+  const mgm=mother&&mother.mo?db.find(function(m){return m.n===mother.mo;}):null;
+
+  // 找兄弟姐妹（同父或同母）
+  const siblings=db.filter(function(m){
+    return m.id!==me.id&&m.g===me.g&&((me.fa&&m.fa===me.fa)||(me.mo&&m.mo===me.mo));
+  });
+
+  // 找子女（父親或母親是本人）
+  const children=db.filter(function(m){
+    return m.fa===me.n||m.mo===me.n;
+  });
+
+  // 找孫子女（父親或母親是本人的子女）
+  const childNames=children.map(function(c){return c.n;});
+  const grandchildren=db.filter(function(m){
+    return childNames.includes(m.fa)||childNames.includes(m.mo);
+  });
+
+  // 配偶
+  const spouses=(me.spouses&&me.spouses.length>0)?me.spouses:(me.sp?[{name:me.sp,rel:'配偶'}]:[]);
+
+  // 建立HTML卡片
+  function mkCard(m,highlight,label){
+    if(!m)return '';
+    const isAlive=(m.alive||( m.dy?'已故':'在世'))==='在世';
+    const border=highlight?'border:2.5px solid var(--red);':'border:1.5px solid rgba(139,105,20,0.25);';
+    const bg=highlight?'background:rgba(139,26,26,0.06);':'background:rgba(255,249,238,0.9);';
+    const nameColor=highlight?'color:var(--red);font-size:16px;font-weight:800;':'color:var(--ink);font-size:14px;font-weight:600;';
+    return '<div onclick="oM('+m.id+')" style="cursor:pointer;'+border+bg+'border-radius:10px;padding:10px 12px;min-width:100px;text-align:center;transition:all 0.2s;position:relative">'
+      +(label?'<div style="font-size:10px;color:var(--gold);font-family:var(--sans);margin-bottom:4px;font-weight:600">'+label+'</div>':'')
+      +'<div style="'+nameColor+'">'+m.n+'</div>'
+      +'<div style="font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:2px">第'+m.g+'代'+(m.r?' · '+m.r:'')+'</div>'
+      +(m.by?'<div style="font-size:10px;color:var(--ink3);font-family:var(--sans);margin-top:1px">生：'+m.by+'</div>':'')
+      +'<div style="font-size:10px;font-family:var(--sans);margin-top:2px;color:'+(isAlive?'#1f6b40':'#999')+'">'+( isAlive?'✅ 在世':'🕯 已故')+'</div>'
+      +'<div style="font-size:9px;color:var(--blue);font-family:var(--sans);margin-top:2px">▶ 點擊查看</div>'
+      +'</div>';
+  }
+
+  function mkEmpty(label){
+    return '<div style="border:1.5px dashed rgba(139,105,20,0.2);border-radius:10px;padding:10px 12px;min-width:100px;text-align:center;opacity:0.5">'
+      +(label?'<div style="font-size:10px;color:var(--gold);font-family:var(--sans);margin-bottom:4px">'+label+'</div>':'')
+      +'<div style="font-size:13px;color:var(--ink3)">未記錄</div>'
+      +'</div>';
+  }
+
+  function row(items,title){
+    if(items.length===0)return '';
+    return '<div style="margin-bottom:6px">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--gold);font-family:var(--sans);margin-bottom:6px;letter-spacing:1px">'+title+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start">'+items.join('')+'</div>'
+      +'</div>';
+  }
+
+  // 箭頭
+  const arrow='<div style="text-align:center;color:rgba(139,105,20,0.4);font-size:18px;margin:6px 0">↓</div>';
+
+  let html='<div style="font-weight:700;color:var(--red);font-family:var(--sans);font-size:14px;margin-bottom:10px">👤 以「'+me.n+'」為中心的五代族譜</div>';
+
+  // 第一代：祖父母
+  const gen1=[];
+  if(gf)gen1.push(mkCard(gf,false,'祖父'));
+  if(gm)gen1.push(mkCard(gm,false,'祖母'));
+  if(mgf)gen1.push(mkCard(mgf,false,'外祖父'));
+  if(mgm)gen1.push(mkCard(mgm,false,'外祖母'));
+  if(gen1.length>0)html+=row(gen1,'第一層：祖父母 / 外祖父母')+arrow;
+
+  // 第二代：父母
+  const gen2=[];
+  if(father)gen2.push(mkCard(father,false,'父親'));
+  else if(me.fa)gen2.push('<div style="border:1.5px dashed rgba(139,105,20,0.2);border-radius:10px;padding:10px 12px;min-width:100px;text-align:center;opacity:0.6"><div style="font-size:10px;color:var(--gold);font-family:var(--sans);margin-bottom:4px">父親</div><div style="font-size:13px;color:var(--ink2)">'+me.fa+'</div><div style="font-size:10px;color:var(--ink3);font-family:var(--sans)">（未建檔）</div></div>');
+  if(mother)gen2.push(mkCard(mother,false,'母親'));
+  else if(me.mo)gen2.push('<div style="border:1.5px dashed rgba(139,105,20,0.2);border-radius:10px;padding:10px 12px;min-width:100px;text-align:center;opacity:0.6"><div style="font-size:10px;color:var(--gold);font-family:var(--sans);margin-bottom:4px">母親</div><div style="font-size:13px;color:var(--ink2)">'+me.mo+'</div><div style="font-size:10px;color:var(--ink3);font-family:var(--sans)">（未建檔）</div></div>');
+  if(gen2.length>0)html+=row(gen2,'第二層：父母')+arrow;
+
+  // 第三代：本人＋配偶＋兄弟姐妹
+  const gen3=[];
+  if(siblings.length>0)siblings.slice(0,3).forEach(function(s){gen3.push(mkCard(s,false,'兄弟姐妹'));});
+  gen3.push(mkCard(me,true,'本人'));
+  spouses.forEach(function(sp){
+    const spM=db.find(function(m){return m.n===sp.name;});
+    if(spM)gen3.push(mkCard(spM,false,sp.rel||'配偶'));
+    else if(sp.name)gen3.push('<div style="border:1.5px solid rgba(184,134,11,0.3);border-radius:10px;padding:10px 12px;min-width:100px;text-align:center;background:rgba(184,134,11,0.04)"><div style="font-size:10px;color:var(--gold);font-family:var(--sans);margin-bottom:4px">'+(sp.rel||'配偶')+'</div><div style="font-size:14px;color:var(--ink2);font-weight:600">'+sp.name+'</div><div style="font-size:10px;color:var(--ink3);font-family:var(--sans)">（未建檔）</div></div>');
+  });
+  html+=row(gen3,'第三層：本人 / 配偶 / 兄弟姐妹');
+
+  // 第四代：子女
+  if(children.length>0){
+    html+=arrow;
+    const gen4=children.map(function(c){return mkCard(c,false,'子女');});
+    html+=row(gen4,'第四層：子女（共'+children.length+'位）');
+  }
+
+  // 第五代：孫子女
+  if(grandchildren.length>0){
+    html+=arrow;
+    const gen5=grandchildren.map(function(gc){return mkCard(gc,false,'孫子女');});
+    html+=row(gen5,'第五層：孫子女（共'+grandchildren.length+'位）');
+  }
+
+  if(children.length===0&&grandchildren.length===0){
+    html+='<div style="font-size:12px;color:var(--ink3);font-family:var(--sans);margin-top:8px;padding:8px;background:rgba(184,134,11,0.04);border-radius:6px">💡 目前尚無子女或孫子女記錄。族人可在「填寫資料」中填入父母姓名，系統將自動建立連結。</div>';
+  }
+
+  container.innerHTML='<div style="padding:4px 0">'+html+'</div>';
 }
 
 /* ===== FIREBASE ===== */
