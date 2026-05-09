@@ -1657,7 +1657,7 @@ function addEditSpouseRow(name,rel,isOnly,by,bm,dy,dm){
 }
 function saveEdit(){
   const m=db.find(d=>d.id===currentEditId);if(!m)return;
-  const fields={n:'e-n',lo:'e-lo',fa:'e-fa',mo:'e-mo',by:'e-by',bm:'e-bm',dy:'e-dy',dm:'e-dm',nt:'e-nt',su:'e-su'};
+  const fields={n:'e-n',lo:'e-lo',fa:'e-fa',mo:'e-mo',by:'e-by',bm:'e-bm',dy:'e-dy',dm:'e-dm',nt:'e-nt',su:'e-su',tel:'e-tel',email:'e-email',line:'e-line'};
   Object.entries(fields).forEach(function(entry){
     const k=entry[0],eid=entry[1];
     const el=document.getElementById(eid);if(el)m[k]=el.value.trim();
