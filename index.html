@@ -674,9 +674,9 @@ let db=[
   {id:14,n:"新居公",g:7,sx:"男",r:"祖公",fa:"",mo:"",sp:"卓氏農娘",spouses:[{"name": "卓氏農娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光發年",bm:"八月九日寅時",dy:"明治壬寅年",dm:"十一月十六日亥時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:15,n:"卓氏農娘",g:7,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"新居公",spouses:[{"name": "新居公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光丁酉年",bm:"十二月二十三日酉時",dy:"明治辛乙年",dm:"八月廿四日未時",nt:"正室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:16,n:"周氏腰",g:7,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"新居公",spouses:[{"name": "新居公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光甲申年",bm:"七月六日申時",dy:"咸豐壬子年",dm:"八月二十二日酉時",nt:"次室",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
-  {id:17,n:"恒春公（義春公）",g:8,sx:"男",r:"祖公",fa:"",mo:"",sp:"陳氏印娘",spouses:[{"name": "陳氏印娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光丙牛年",bm:"十一月三日申時",dy:"明治壬寅年",dm:"十一月七日未時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:17,n:"恒春公",g:8,sx:"男",r:"祖公",fa:"",mo:"",sp:"陳氏印娘",spouses:[{"name": "陳氏印娘", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光丙牛年",bm:"十一月三日申時",dy:"明治壬寅年",dm:"十一月七日未時",nt:"又名義春公",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:18,n:"陳氏印娘",g:8,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"恒春公",spouses:[{"name": "恒春公", "rel": "義春公", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"道光庚戌年",bm:"十一月十五日卯時",dy:"昭和癸酉年",dm:"五月十八日酉時",nt:"",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
-  {id:19,n:"景煌公",g:9,sx:"男",r:"長子",fa:"恒春公（義春公）",mo:"陳氏印娘",sp:"陳氏蜜",spouses:[{"name": "陳氏蜜", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"明治辛未年",bm:"十一月二十七日子時",dy:"昭和戌寅年",dm:"二月五日未時",nt:"長子",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
+  {id:19,n:"景煌公",g:9,sx:"男",r:"長子",fa:"恒春公",mo:"陳氏印娘",sp:"陳氏蜜",spouses:[{"name": "陳氏蜜", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"明治辛未年",bm:"十一月二十七日子時",dy:"昭和戌寅年",dm:"二月五日未時",nt:"長子",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:20,n:"陳氏蜜",g:9,sx:"女",r:"祖媽（媳）",fa:"",mo:"",sp:"景煌公",spouses:[{"name": "景煌公", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"明治壬申年",bm:"五月二十五日卯時",dy:"昭和丙寅年",dm:"六月十四日戌時",nt:"景煌公配偶",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:21,n:"景潭公",g:9,sx:"男",r:"祖公",fa:"",mo:"",sp:"",spouses:[],lo:"",by:"光緒庚辰年",bm:"九月十九日亥時",dy:"光緒戌戌年",dm:"三月十日未時",nt:"另份記載待確認",su:"維杰整理",alive:"已故",tel:'',email:'',indCat:'',indSub:'',job:''},
   {id:22,n:"曾慶璋",g:10,sx:"男",r:"長子",fa:"景煌公",mo:"陳氏蜜",sp:"陳氏救",spouses:[{"name": "陳氏救", "rel": "配偶", "by": "", "bm": "", "dy": "", "dm": ""}],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:'',email:'',indCat:'',indSub:'',job:''},
@@ -2085,8 +2085,8 @@ async function fbLoad(){
     const data=await res.json();
     if(data&&typeof data==='object'){
       const fbMembers=Object.values(data).filter(function(m){return m&&m.id&&m.n;});
-      // 至少要有10筆有效資料才信任Firebase的資料
-      if(fbMembers.length>=10){
+      // 只要Firebase有任何有效資料就使用（不再強制要求10筆）
+      if(fbMembers.length>0){
         db=fbMembers;
         nid=Math.max.apply(null,db.map(function(m){return m.id||0;}))+1;
         if(nid<200)nid=200;
