@@ -1845,26 +1845,27 @@ function saveEdit(){
   const byVal=(document.getElementById('e-by')||{}).value||'';
   const bmSC=(document.getElementById('e-bm')||{}).value||'吉時';
   m.by=byVal.trim();
-  m.bm=byVal.trim()?bmSC:'';  // 有填年月日才儲存時辰
+  m.bm=byVal.trim()?bmSC:'';
   // 去世：年月日 + 時辰，空白則清空
   const dyVal=(document.getElementById('e-dy')||{}).value||'';
   const dmSC=(document.getElementById('e-dm')||{}).value||'吉時';
   m.dy=dyVal.trim();
-  m.dm=dyVal.trim()?dmSC:'';  // 沒填去世年月日則清空時辰
+  m.dm=dyVal.trim()?dmSC:'';
+  // 去世時辰欄位顯示控制
+  const dmWrap=document.getElementById('e-dm-wrap');
+  if(dmWrap)dmWrap.style.display=dyVal.trim()?'flex':'none';
+  // 一般文字欄位
   const fields={n:'e-n',lo:'e-lo',fa:'e-fa',mo:'e-mo',nt:'e-nt',su:'e-su',tel:'e-tel',email:'e-email',line:'e-line'};
   Object.entries(fields).forEach(function(entry){
     const k=entry[0],eid=entry[1];
     const el=document.getElementById(eid);if(el)m[k]=el.value.trim();
   });
-  // 去世時辰欄位：有填去世年月日才顯示
-  const dmWrap=document.getElementById('e-dm-wrap');
-  if(dmWrap)dmWrap.style.display=dyVal.trim()?'flex':'none';
-  m.bm=bmVal;
-  m.dm=dmVal;
+  // 代數、性別、身份、在世狀態
   m.g=parseInt(document.getElementById('e-g').value)||m.g;
   m.sx=document.getElementById('e-sx').value;
   m.r=document.getElementById('e-r').value;
   const ea=document.getElementById('e-alive');if(ea)m.alive=ea.value;
+  // 職業欄位
   const eic=document.getElementById('e-ind-cat');if(eic)m.indCat=eic.value;
   const eis=document.getElementById('e-ind-sub');if(eis)m.indSub=eis.value;
   const ej=document.getElementById('e-job');if(ej)m.job=ej.value.trim();
