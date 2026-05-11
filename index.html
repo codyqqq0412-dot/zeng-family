@@ -206,7 +206,10 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
   </div>
   <div style="margin-left:auto;text-align:right;position:relative;z-index:1;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
     <div id="sync-status" style="font-size:11px;font-family:var(--sans);color:var(--gold3);letter-spacing:0.5px;white-space:nowrap">🔄 連線中…</div>
-    <button onclick="downloadReport()" style="font-size:10px;padding:3px 8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:5px;color:var(--gold3);cursor:pointer;font-family:var(--sans);white-space:nowrap;touch-action:manipulation">⬇ 下載族譜</button>
+    <div style="display:flex;gap:5px;align-items:center">
+      <button onclick="downloadReport()" style="font-size:10px;padding:3px 8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:5px;color:var(--gold3);cursor:pointer;font-family:var(--sans);white-space:nowrap;touch-action:manipulation">⬇ 下載族譜</button>
+      <button onclick="fbForceSync()" id="force-sync-btn" style="font-size:10px;padding:3px 8px;background:rgba(255,200,0,0.18);border:1px solid rgba(255,200,0,0.35);border-radius:5px;color:#ffe066;cursor:pointer;font-family:var(--sans);white-space:nowrap;touch-action:manipulation">🔄 強制同步（管理員）</button>
+    </div>
   </div>
 </header>
 <main>
@@ -872,6 +875,8 @@ let db=[
   {id:190,n:"曾麒禎",g:13,sx:"男",r:"次子",fa:"曾逸倫",mo:"莊雅評",sp:"",spouses:[],lo:"",by:"",bm:"",dy:"",dm:"",nt:"",su:"維杰整理",alive:"在世",tel:"",email:"",line:"",indCat:"",indSub:"",job:""}
 ];
 let nid=200;
+// 備份內建族人資料，供強制同步使用
+const __builtinDB=db.slice();
 
 /* ============================================================
    DATE CONVERSION: Solar → ROC + Shichen（精確農曆查表法）
@@ -2335,6 +2340,49 @@ renderM();
 setTimeout(function(){
   try{fbLoad();}catch(e){console.warn('Firebase初始化失敗',e);}
 },100);
+
+/* ===== 強制同步：將index.html內建db[]全部覆蓋寫入Firebase ===== */
+async function fbForceSync(){
+  const btn=document.getElementById('force-sync-btn');
+  // 密碼驗證
+  const pwd=prompt('🔐 請輸入管理員密碼：');
+  if(pwd===null)return; // 按取消
+  if(pwd!=='Zeng@Admin2025'){
+    alert('❌ 密碼錯誤，無法執行強制同步。');
+    return;
+  }
+  // 確認對話框
+  if(!confirm('⚠️ 強制同步將會把目前 index.html 內建的 '+__builtinDB.length+' 位族人資料\n完整覆蓋上傳到 Firebase。\n\n✅ 適合用途：第一次大批匯入、修復資料\n⚠️ 注意：Firebase 上的舊資料會被全部替換\n\n確定要繼續嗎？'))return;
+  btn.disabled=true;
+  btn.textContent='⏳ 同步中…';
+  setSyncStatus('loading','強制同步中，請稍候…');
+  try{
+    // 重新讀取db陣列（含所有新增族人）
+    const batch={};
+    // 使用原始內建db資料（重新從HTML的db變數取得）
+    const allMembers=typeof __builtinDB!=='undefined'?__builtinDB:db;
+    allMembers.forEach(function(m){batch[m.id]=m;});
+    const res=await fetch(FB_URL+'/members.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(batch)
+    });
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    // 同步成功，重新載入
+    db=allMembers.slice();
+    nid=Math.max.apply(null,db.map(function(m){return m.id||0;}))+1;
+    if(nid<200)nid=200;
+    buildTree();renderM();
+    setSyncStatus('ok','強制同步完成（'+db.length+'位族人）✓');
+    btn.textContent='✅ 同步完成';
+    setTimeout(function(){btn.textContent='🔄 強制同步（管理員）';btn.disabled=false;},4000);
+  }catch(e){
+    setSyncStatus('error','同步失敗：'+e.message);
+    btn.textContent='❌ 失敗，重試';
+    btn.disabled=false;
+    console.error('強制同步失敗',e);
+  }
+}
 </script>
 </body>
 </html>
