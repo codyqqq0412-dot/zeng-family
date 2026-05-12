@@ -179,7 +179,7 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
 .lock-hint{font-size:11px;color:rgba(255,255,255,0.35);font-family:var(--sans);margin-top:20px}
 @media print{.bnav,.hdr,.lock-screen{display:none!important}.panel{display:block!important}body{padding:0}}
 /* 浮動通知 */
-.float-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9000;background:#1b5e20;color:#fff;font-family:var(--sans);font-size:14px;padding:14px 22px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.25);white-space:nowrap;opacity:0;transition:opacity 0.3s;pointer-events:none;letter-spacing:0.5px;max-width:90vw;text-align:center}
+.float-toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:99999;background:#1b5e20;color:#fff;font-family:var(--sans);font-size:14px;padding:14px 22px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.25);white-space:nowrap;opacity:0;transition:opacity 0.3s;pointer-events:none;letter-spacing:0.5px;max-width:90vw;text-align:center}
 </style>
 </head>
 <body>
@@ -667,7 +667,7 @@ footer{position:relative;z-index:1;text-align:center;padding:16px;border-top:1px
         <button onclick="saveEdit()" style="flex:1;padding:14px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--serif);font-size:15px;letter-spacing:2px;cursor:pointer;touch-action:manipulation">✅ 儲存修改</button>
         <button onclick="cancelEdit()" style="padding:14px 16px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-family:var(--serif);font-size:14px;color:var(--ink3);cursor:pointer;touch-action:manipulation">取消</button>
       </div>
-      <div id="edit-ok" style="display:none;margin-top:10px;padding:16px;background:#e8f5e9;border:2px solid #4caf50;border-radius:8px;color:#1b5e20;font-size:15px;font-family:var(--sans);text-align:center;font-weight:700;">✅ 資料已儲存！族譜已同步更新。</div>
+      <div id="edit-ok" style="display:none;margin-top:10px;padding:18px;background:#e8f5e9;border:3px solid #4caf50;border-radius:10px;color:#1b5e20;font-size:16px;font-family:var(--sans);text-align:center;font-weight:700;letter-spacing:1px;box-shadow:0 4px 16px rgba(76,175,80,0.25);">✅ 資料已儲存成功！族譜已同步更新。</div>
     </div>
   </div>
 </div>
@@ -1896,7 +1896,11 @@ function saveEdit(){
   renderM();
   // 立即顯示成功提示（不等Firebase）
   const editOk=document.getElementById('edit-ok');
-  if(editOk){editOk.style.display='block';setTimeout(function(){editOk.style.display='none';},3000);}
+  if(editOk){
+    editOk.style.display='block';
+    editOk.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(function(){editOk.style.display='none';},4000);
+  }
   showToast('✦ 「'+m.n+'」資料已儲存！族譜已同步更新。');
   // Firebase在背景同步
   setSyncStatus('loading','儲存中…');
