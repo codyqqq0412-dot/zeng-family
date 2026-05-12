@@ -1877,17 +1877,30 @@ function saveEdit(){
     const n=row.querySelector('.esp-name').value.trim();
     if(!n)return;
     const r=row.querySelector('.esp-rel').value;
+    // 直接保留原始填入的文字，不強制轉換格式
     const sby_raw=((row.querySelector('.esp-by')||{}).value||'').trim();
     const espBmEl=row.querySelector('.esp-bm');
     const sbm_sc=espBmEl?espBmEl.value:'吉時';
-    const sby=spDateToLunar(sby_raw,'','by');
-    const sbm=spDateToLunar(sby_raw,sbm_sc,'b');
     const sdy_raw=((row.querySelector('.esp-dy')||{}).value||'').trim();
     const espDmEl=row.querySelector('.esp-dm');
     const sdm_sc=espDmEl?espDmEl.value:'';
-    const sdy=spDateToLunar(sdy_raw,'','by');
-    const sdm=sdy_raw?spDateToLunar(sdy_raw,sdm_sc,'d'):'';
-    newSpouses.push({name:n,rel:r,by:sby,bm:sbm,dy:sdy,dm:sdm});
+    // 安全處理：若格式為西元yyyy/mm/dd則轉換，否則直接儲存原文
+    function safeDate(raw,sc,type){
+      if(!raw)return type==='b'?(sc||'吉時'):'';
+      var p=raw.replace(/-/g,'/').split('/');
+      if(p.length>=3&&!isNaN(parseInt(p[0]))&&parseInt(p[0])>1000){
+        try{return spDateToLunar(raw,sc,type);}catch(e){return raw;}
+      }
+      // 非西元格式，直接儲存原始文字+時辰
+      if(type==='by')return raw;
+      if(type==='b')return raw+(sc&&sc!=='吉時'?' '+sc:' 吉時');
+      return raw+(sc?' '+sc:'');
+    }
+    newSpouses.push({name:n,rel:r,
+      by:safeDate(sby_raw,'','by'),
+      bm:safeDate(sby_raw,sbm_sc,'b'),
+      dy:safeDate(sdy_raw,'','by'),
+      dm:sdy_raw?safeDate(sdy_raw,sdm_sc,'d'):'' });
   });
   m.spouses=newSpouses;
   m.sp=newSpouses.length>0?newSpouses[0].name:'';
@@ -2276,10 +2289,15 @@ async function fbSave(member){
       method:'PUT',headers:{'Content-Type':'application/json'},
       body:JSON.stringify(member)
     });
-    if(!res.ok)throw new Error();
-    setSyncStatus('ok','已儲存 ✓');
-    setTimeout(function(){setSyncStatus('ok','已同步');},2000);
-  }catch(e){setSyncStatus('error','儲存失敗，請重試');console.warn(e);}
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    setSyncStatus('ok','已同步儲存 ✓');
+    setTimeout(function(){setSyncStatus('ok','已同步（'+db.length+'位族人）');},2000);
+  }catch(e){
+    // Firebase失敗時，本地資料已更新，提示使用者網路問題
+    setSyncStatus('error','本地已儲存，雲端同步失敗（請檢查網路）');
+    showToast('⚠️ 本地已儲存！Firebase連線失敗，請稍後重試或重新載入頁面。','#b35c00');
+    console.warn('fbSave failed:',e);
+  }
 }
 
 async function fbLoad(){
