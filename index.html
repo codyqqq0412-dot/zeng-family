@@ -1900,6 +1900,7 @@ function saveEdit(){
   showToast('✦ 「'+m.n+'」資料已儲存！族譜已同步更新。');
   // Firebase在背景同步
   setSyncStatus('loading','儲存中…');
+  _lastSaveTime=Date.now(); // 保護儲存30秒內不被 fbListen 覆蓋
   fbSave(m);
   // 切回查看模式
   setTimeout(function(){
@@ -2316,8 +2317,10 @@ async function fbLoad(){
   }
 }
 
+var _lastSaveTime=0;
 function fbListen(){
   setInterval(async function(){
+    if(Date.now()-_lastSaveTime<30000)return;
     try{
       const res=await fetch(FB_URL+'/members.json');
       if(!res.ok)return;
@@ -2327,12 +2330,12 @@ function fbListen(){
       if(fbM.length===0)return;
       const fbMax=Math.max.apply(null,fbM.map(function(m){return m.id||0;}));
       const lcMax=Math.max.apply(null,db.map(function(m){return m.id||0;}));
-      if(fbM.length!==db.length||fbMax!==lcMax){
+      if(fbM.length>db.length||fbMax>lcMax){
         db=fbM;nid=Math.max(fbMax+1,200);
         buildTree();renderM();setSyncStatus('ok','已同步最新 ✓');
       }
     }catch(e){}
-  },20000);
+  },30000);
 }
 
 /* INIT */
